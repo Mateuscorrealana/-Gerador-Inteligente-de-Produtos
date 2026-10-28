@@ -1,0 +1,305 @@
+{
+    "_meta": {
+        "empresa": "B.live In Pets",
+        "versao": "2.0",
+        "regra": "Nunca inventar fatos técnicos. Dados com status confirmado podem ser tratados como fatos. Informações comerciais não devem ser transformadas em especificações técnicas."
+    },
+    "linhas": {
+        "clinica_veterinaria": {
+            "nome": "Linha Clínica Veterinária"
+        },
+        "moda_pet": {
+            "nome": "Moda Pet"
+        },
+        "acessorios_pet": {
+            "nome": "Acessórios Pet"
+        }
+    },
+    "categorias": {
+        "colar_elizabetano": {
+            "nome": "Colar Elizabetano",
+            "linha": "clinica_veterinaria"
+        },
+        "donut_recuperacao": {
+            "nome": "Donut de Recuperação",
+            "linha": "clinica_veterinaria"
+        },
+        "macacao_pos_cirurgico": {
+            "nome": "Macacão Pós-Cirúrgico",
+            "linha": "clinica_veterinaria"
+        },
+        "roupa_pet": {
+            "nome": "Roupa Pet",
+            "linha": "moda_pet"
+        },
+        "regata_pet": {
+            "nome": "Regata Pet",
+            "linha": "moda_pet"
+        },
+        "vestido_pet": {
+            "nome": "Vestido Pet",
+            "linha": "moda_pet"
+        },
+        "moletom_pet": {
+            "nome": "Moletom Pet",
+            "linha": "moda_pet"
+        },
+        "fantasia_pet": {
+            "nome": "Fantasia Pet",
+            "linha": "moda_pet"
+        },
+        "capa_chuva_pet": {
+            "nome": "Capa de Chuva Pet",
+            "linha": "moda_pet"
+        },
+        "colete_pet": {
+            "nome": "Colete Pet",
+            "linha": "moda_pet"
+        },
+        "acessorio_pet": {
+            "nome": "Acessório Pet",
+            "linha": "acessorios_pet"
+        },
+        "manta_pet": {
+            "nome": "Manta Pet",
+            "linha": "acessorios_pet"
+        }
+    },
+    "materiais": {
+        "espuma_pac": {
+            "nome": "Espuma PAC"
+        },
+        "tecido_buckle": {
+            "nome": "Tecido Buckle"
+        },
+        "microprint": {
+            "nome": "MicroPrint"
+        },
+        "nylon_emborrachado": {
+            "nome": "Nylon emborrachado"
+        },
+        "mescla_suplex": {
+            "nome": "Mescla Suplex"
+        }
+    },
+    "tecnologias": {
+        "design_patenteado_blive": {
+            "nome": "Design patenteado B.live"
+        },
+        "testes_veterinarios_9_meses": {
+            "nome": "Testado durante aproximadamente 9 meses com acompanhamento veterinário"
+        },
+        "brilha_no_escuro": {
+            "nome": "Brilha no escuro"
+        }
+    },
+    "familias": {
+        "colar_elizabetano": {
+            "categoria": "colar_elizabetano",
+            "especie": {
+                "valor": [
+                    "cachorro",
+                    "gato"
+                ],
+                "status": "confirmado"
+            },
+            "materiais": [
+                {
+                    "papel": "estrutura",
+                    "ref": "espuma_pac",
+                    "status": "confirmado"
+                },
+                {
+                    "papel": "revestimento",
+                    "ref": "tecido_buckle",
+                    "status": "confirmado"
+                }
+            ],
+            "caracteristicas": [
+                {
+                    "valor": "Macio",
+                    "status": "confirmado"
+                },
+                {
+                    "valor": "Acolchoado",
+                    "status": "confirmado"
+                },
+                {
+                    "valor": "Passagem interna para coleira",
+                    "status": "confirmado"
+                }
+            ],
+            "diferenciais": [
+                {
+                    "ref": "design_patenteado_blive",
+                    "status": "confirmado"
+                }
+            ],
+            "desenvolvimento": [
+                {
+                    "ref": "testes_veterinarios_9_meses",
+                    "status": "confirmado"
+                }
+            ],
+            "indicacao_uso": [
+                {
+                    "valor": "Pós-operatório e recuperação",
+                    "status": "confirmado"
+                },
+                {
+                    "valor": "Ajuda a reduzir o acesso do pet a pontos, feridas e curativos",
+                    "status": "informacao_comercial"
+                }
+            ]
+        },
+        "donut_tradicional": {
+            "categoria": "donut_recuperacao",
+            "materiais": [
+                {
+                    "papel": "revestimento",
+                    "ref": "microprint",
+                    "status": "confirmado"
+                }
+            ],
+            "indicacao_uso": [
+                {
+                    "valor": "Pós-operatório e recuperação",
+                    "status": "confirmado"
+                }
+            ]
+        },
+        "donut_impermeavel": {
+            "categoria": "donut_recuperacao",
+            "materiais": [
+                {
+                    "papel": "revestimento",
+                    "ref": "nylon_emborrachado",
+                    "status": "confirmado"
+                }
+            ],
+            "impermeabilidade": {
+                "valor": true,
+                "status": "confirmado"
+            },
+            "caracteristicas": [
+                {
+                    "valor": "Possui duas travas",
+                    "status": "confirmado"
+                },
+                {
+                    "valor": "Fácil higienização",
+                    "status": "confirmado"
+                }
+            ],
+            "indicacao_uso": [
+                {
+                    "valor": "Pós-operatório e recuperação",
+                    "status": "confirmado"
+                }
+            ]
+        },
+        "macacao_pos_caes": {
+            "categoria": "macacao_pos_cirurgico",
+            "especie": {
+                "valor": [
+                    "cachorro"
+                ],
+                "status": "confirmado"
+            },
+            "caracteristicas": [
+                {
+                    "valor": "Fechamento em zíper",
+                    "status": "confirmado"
+                },
+                {
+                    "valor": "Zíper superior branco",
+                    "status": "confirmado"
+                },
+                {
+                    "valor": "Coxa traseira mais curta para melhor ajuste",
+                    "status": "confirmado"
+                }
+            ],
+            "indicacao_uso": [
+                {
+                    "valor": "Pós-operatório e recuperação",
+                    "status": "confirmado"
+                }
+            ],
+            "dados_a_confirmar": [
+                {
+                    "campo": "uv",
+                    "pergunta": "A proteção UV50+ deste produto está confirmada?",
+                    "tipo": "sim_nao"
+                }
+            ]
+        },
+        "macacao_pos_gatos": {
+            "categoria": "macacao_pos_cirurgico",
+            "especie": {
+                "valor": [
+                    "gato"
+                ],
+                "status": "confirmado"
+            },
+            "caracteristicas": [
+                {
+                    "valor": "Modelagem específica para gatos",
+                    "status": "confirmado"
+                }
+            ],
+            "indicacao_uso": [
+                {
+                    "valor": "Pós-operatório e recuperação",
+                    "status": "confirmado"
+                }
+            ],
+            "dados_a_confirmar": [
+                {
+                    "campo": "uv",
+                    "pergunta": "A proteção UV50+ deste produto está confirmada?",
+                    "tipo": "sim_nao"
+                }
+            ]
+        },
+        "regata_pet": {
+            "categoria": "regata_pet"
+        },
+        "vestido_pet": {
+            "categoria": "vestido_pet"
+        },
+        "moletom_pet": {
+            "categoria": "moletom_pet"
+        },
+        "fantasia_pet": {
+            "categoria": "fantasia_pet"
+        },
+        "roupa_pet": {
+            "categoria": "roupa_pet"
+        },
+        "capa_chuva_pet": {
+            "categoria": "capa_chuva_pet",
+            "indicacao_uso": [
+                {
+                    "valor": "Dias de chuva",
+                    "status": "confirmado"
+                }
+            ]
+        },
+        "colete_pet": {
+            "categoria": "colete_pet"
+        },
+        "acessorio_pet": {
+            "categoria": "acessorio_pet"
+        },
+        "manta_pet": {
+            "categoria": "manta_pet",
+            "diferenciais": [
+                {
+                    "ref": "brilha_no_escuro",
+                    "status": "confirmado"
+                }
+            ]
+        }
+    }
+}

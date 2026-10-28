@@ -1,0 +1,270 @@
+{
+    "_meta": {
+        "empresa": "B.live In Pets",
+        "versao": "2.0",
+        "regra": "Dados específicos do produto complementam os dados herdados da família."
+    },
+    "produtos": {
+        "92037": {
+            "nome": {
+                "valor": "Colar Elizabetano Leão",
+                "status": "confirmado"
+            },
+            "familia": "colar_elizabetano",
+            "diferenciais": [
+                {
+                    "valor": "Design lúdico de leão",
+                    "status": "confirmado"
+                }
+            ]
+        },
+        "colar-elizabetano-sapo": {
+            "nome": {
+                "valor": "Colar Elizabetano Sapo",
+                "status": "confirmado"
+            },
+            "familia": "colar_elizabetano",
+            "caracteristicas": [
+                {
+                    "valor": "Fechamento em velcro",
+                    "status": "confirmado"
+                },
+                {
+                    "valor": "Lavável",
+                    "status": "confirmado"
+                },
+                {
+                    "valor": "Reutilizável",
+                    "status": "confirmado"
+                }
+            ],
+            "diferenciais": [
+                {
+                    "valor": "Design lúdico de sapo",
+                    "status": "confirmado"
+                }
+            ]
+        },
+        "92046": {
+            "nome": {
+                "valor": "Donut de Recuperação Tradicional",
+                "status": "confirmado"
+            },
+            "familia": "donut_tradicional"
+        },
+        "donut-impermeavel": {
+            "nome": {
+                "valor": "Donut Impermeável",
+                "status": "confirmado"
+            },
+            "familia": "donut_impermeavel"
+        },
+        "98090": {
+            "nome": {
+                "valor": "Macacão Pós-Cirúrgico Liso Regular",
+                "status": "confirmado"
+            },
+            "familia": "macacao_pos_caes",
+            "caracteristicas": [
+                {
+                    "valor": "Modelagem Regular",
+                    "status": "confirmado"
+                },
+                {
+                    "valor": "Modelo com abertura específica",
+                    "status": "confirmado"
+                }
+            ]
+        },
+        "98091B": {
+            "nome": {
+                "valor": "Macacão Pós-Cirúrgico Liso Castração Macho",
+                "status": "confirmado"
+            },
+            "familia": "macacao_pos_caes",
+            "caracteristicas": [
+                {
+                    "valor": "Modelagem para castração de machos",
+                    "status": "confirmado"
+                },
+                {
+                    "valor": "Modelo fechado",
+                    "status": "confirmado"
+                }
+            ]
+        },
+        "98092B": {
+            "nome": {
+                "valor": "Macacão Pós-Cirúrgico Estampado Regular",
+                "status": "confirmado"
+            },
+            "familia": "macacao_pos_caes",
+            "caracteristicas": [
+                {
+                    "valor": "Modelagem Regular",
+                    "status": "confirmado"
+                },
+                {
+                    "valor": "Modelo com abertura específica",
+                    "status": "confirmado"
+                }
+            ]
+        },
+        "98093B": {
+            "nome": {
+                "valor": "Macacão Pós-Cirúrgico Estampado Castração Macho",
+                "status": "confirmado"
+            },
+            "familia": "macacao_pos_caes",
+            "caracteristicas": [
+                {
+                    "valor": "Modelagem para castração de machos",
+                    "status": "confirmado"
+                },
+                {
+                    "valor": "Modelo fechado",
+                    "status": "confirmado"
+                }
+            ]
+        },
+        "98088": {
+            "nome": {
+                "valor": "Macacão Pós-Cirúrgico Liso Gato",
+                "status": "confirmado"
+            },
+            "familia": "macacao_pos_gatos",
+            "tamanhos": {
+                "valor": [
+                    "0",
+                    "1",
+                    "2",
+                    "3",
+                    "4",
+                    "5"
+                ],
+                "status": "confirmado"
+            },
+            "tabela_peso_kg": {
+                "0": "1,7 a 2,3 kg",
+                "1": "2,3 a 3,0 kg",
+                "2": "3,0 a 3,8 kg",
+                "3": "3,8 a 5,0 kg",
+                "4": "5,0 a 7,0 kg",
+                "5": "7,0 a 9,0 kg"
+            }
+        },
+        "98089": {
+            "nome": {
+                "valor": "Macacão Pós-Cirúrgico Estampado Gato",
+                "status": "confirmado"
+            },
+            "familia": "macacao_pos_gatos",
+            "tamanhos": {
+                "valor": [
+                    "0",
+                    "1",
+                    "2",
+                    "3",
+                    "4",
+                    "5"
+                ],
+                "status": "confirmado"
+            },
+            "tabela_peso_kg": {
+                "0": "1,7 a 2,3 kg",
+                "1": "2,3 a 3,0 kg",
+                "2": "3,0 a 3,8 kg",
+                "3": "3,8 a 5,0 kg",
+                "4": "5,0 a 7,0 kg",
+                "5": "7,0 a 9,0 kg"
+            }
+        },
+        "90195": {
+            "nome": {
+                "valor": "Regata Aquarela",
+                "status": "confirmado"
+            },
+            "familia": "regata_pet"
+        },
+        "regata-constelacao": {
+            "nome": {
+                "valor": "Regata Constelação",
+                "status": "confirmado"
+            },
+            "familia": "regata_pet",
+            "diferenciais": [
+                {
+                    "ref": "brilha_no_escuro",
+                    "status": "confirmado"
+                }
+            ]
+        },
+        "regata-ocean": {
+            "nome": {
+                "valor": "Regata Ocean",
+                "status": "confirmado"
+            },
+            "familia": "regata_pet",
+            "protecao_uv50": {
+                "valor": true,
+                "status": "informacao_comercial"
+            },
+            "dados_a_confirmar": [
+                {
+                    "campo": "uv",
+                    "pergunta": "A proteção UV50+ da Regata Ocean está tecnicamente confirmada?",
+                    "tipo": "sim_nao"
+                }
+            ]
+        },
+        "930000": {
+            "nome": {
+                "valor": "Capa de Chuva Pet",
+                "status": "confirmado"
+            },
+            "familia": "capa_chuva_pet",
+            "tamanhos": {
+                "valor": "XP ao EG",
+                "status": "confirmado"
+            }
+        },
+        "92031": {
+            "nome": {
+                "valor": "Manta Pet Brilha no Escuro",
+                "status": "confirmado"
+            },
+            "familia": "manta_pet",
+            "cores": {
+                "valor": [
+                    "Sortidas"
+                ],
+                "status": "confirmado"
+            },
+            "medidas": {
+                "largura_cm": 80,
+                "comprimento_cm": 100
+            }
+        },
+        "95098": {
+            "nome": {
+                "valor": "Vestido Power Up",
+                "status": "confirmado"
+            },
+            "familia": "vestido_pet"
+        },
+        "95097": {
+            "nome": {
+                "valor": "Colete Mario",
+                "status": "confirmado"
+            },
+            "familia": "colete_pet"
+        },
+        "vestido-moscou": {
+            "nome": {
+                "valor": "Vestido Moscou",
+                "status": "confirmado"
+            },
+            "familia": "vestido_pet"
+        }
+    }
+}

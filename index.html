@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>B.live In Pets | Gerador Inteligente de Produtos</title>
+  <link rel="stylesheet" href="/css-principal/index.css">
+</head>
+
+<body>
+  <header class="topo">
+    <div class="logo">
+      <img src="/logo/images.jpg" alt="B.live In Pets">
+    </div>
+    <div class="wrap">
+      <h1>Gerador Inteligente de Produtos</h1>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <section class="card" id="entrada">
+      <label>URL do produto *
+        <input id="url" type="url" autocomplete="url" placeholder="https://www.bliveinpets.com.br/produto-exemplo">
+      </label>
+
+      <p class="ajuda">
+        Cole a URL do produto da B.live. O sistema irá ler a página, cruzar as informações com o banco de conhecimento
+        da marca e gerar o conteúdo com IA.
+      </p>
+
+      <div class="acoes" style="margin-top: 18px;">
+        <button type="button" id="btnAnalisar" class="btn principal">ANALISAR E GERAR CADASTRO</button>
+    </section>
+
+    <section class="card oculto" id="progresso">
+      <h2>ANALISANDO PRODUTO...</h2>
+      <ul class="passos">
+        <li id="passo0">Lendo a página e identificando o produto</li>
+        <li id="passo1">Cruzando com o conhecimento da B.live</li>
+        <li id="passo2">Criando conteúdo de e-commerce</li>
+        <li id="passo3">Otimizando SEO e GEO</li>
+        <li id="passo4">Finalizando conteúdos de marketplace</li>
+        <li id="passo5">Pronto.</li>
+      </ul>
+    </section>
+
+    <section class="card pendencias oculto" id="avisos">
+      <h2>Atenção</h2>
+      <div id="listaAvisos"></div>
+    </section>
+
+    <section class="oculto" id="resultados">
+      <div id="listaResultados"></div>
+    </section>
+  </main>
+
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+  <script type="module" src="/js/index.js"></script>
+</body>
+
+</html>

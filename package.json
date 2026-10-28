@@ -1,0 +1,10 @@
+{
+  "name": "blive-gerador-produtos",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Gerador inteligente de produtos da B.live In Pets",
+  "type": "module",
+  "dependencies": {
+    "@google/genai": "^2.30.0"
+  }
+}
