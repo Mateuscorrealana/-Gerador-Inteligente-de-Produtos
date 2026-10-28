@@ -628,6 +628,11 @@ textarea {
 }
 
 @media (max-width: 800px) {
+    .topo {
+        width: 100%;
+        margin-left: 0;
+    }
+
     .duo {
         grid-template-columns: minmax(0, 1fr);
     }
@@ -646,6 +651,12 @@ textarea {
 
     .controles-salvos select {
         grid-column: span 2;
+    }
+
+    .wrap-1, h1{
+        position: relative;
+        right: 100px;
+        top: -20px;
     }
 }
 
