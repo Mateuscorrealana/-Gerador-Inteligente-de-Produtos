@@ -12,19 +12,11 @@ const valorDe = (id) => ($(id)?.value || '').trim();
 
 function ligar(id, evento, funcao) {
   const el = $(id);
-
-  if (el) {
-    el.addEventListener(evento, funcao);
-  } else {
-    console.warn(`Elemento #${id} não encontrado no index.html.`);
-  }
+  if (el) el.addEventListener(evento, funcao);
+  else console.warn(`Elemento #${id} não encontrado no index.html.`);
 }
 
-const estado = {
-  entrada: null,
-  conteudo: null,
-  dados: null
-};
+const estado = { entrada: null, conteudo: null, dados: null };
 
 const SECOES = [
   { id: 'palavras', titulo: '1. Palavras-chave para busca interna' },
@@ -37,18 +29,9 @@ const SECOES = [
     id: 'marketplace',
     titulo: '7. Descrição para marketplaces (Shopee, Mercado Livre e TikTok Shop)'
   },
-  {
-    id: 'tituloSeo',
-    titulo: '8. Título SEO para Google',
-    limite: 60
-  },
-  {
-    id: 'meta',
-    titulo: '9. Meta Description',
-    limite: 160
-  }
+  { id: 'tituloSeo', titulo: '8. Título SEO para Google', limite: 60 },
+  { id: 'meta', titulo: '9. Meta Description', limite: 160 }
 ];
-
 
 /* =========================================================
    ENTRADA DO PRODUTO
@@ -85,14 +68,12 @@ function coletarEntrada() {
   return entrada;
 }
 
-
 /* =========================================================
    GERAR PRODUTO COM GEMINI
    ========================================================= */
 
 async function analisarProduto() {
   const btn = $('btnAnalisar');
-
   if (!btn || btn.disabled) return;
 
   const entrada = coletarEntrada();
@@ -114,12 +95,10 @@ async function analisarProduto() {
   $('progresso')?.classList.remove('oculto');
 
   const textoOriginal = btn.textContent;
-
   btn.disabled = true;
   btn.textContent = 'ANALISANDO...';
 
   const controle = new AbortController();
-
   const timer = setTimeout(
     () => controle.abort(),
     CONFIG.timeoutMs
@@ -143,9 +122,7 @@ async function analisarProduto() {
     }
 
     let payload;
-
-    const contentType =
-      resposta.headers.get('content-type') || '';
+    const contentType = resposta.headers.get('content-type') || '';
 
     if (contentType.includes('application/x-ndjson')) {
       payload = await lerRespostaEmEtapas(resposta);
@@ -154,8 +131,7 @@ async function analisarProduto() {
 
       if (!resposta.ok) {
         throw new Error(
-          payload.erro ||
-          `Erro ${resposta.status} ao gerar o produto.`
+          payload.erro || `Erro ${resposta.status} ao gerar o produto.`
         );
       }
 
@@ -164,15 +140,12 @@ async function analisarProduto() {
 
     if (!resposta.ok) {
       throw new Error(
-        payload?.erro ||
-        `Erro ${resposta.status} ao gerar o produto.`
+        payload?.erro || `Erro ${resposta.status} ao gerar o produto.`
       );
     }
 
     if (!payload?.conteudo || !payload?.dados) {
-      throw new Error(
-        'A API não retornou os dados do produto.'
-      );
+      throw new Error('A API não retornou os dados do produto.');
     }
 
     marcarPasso(0);
@@ -181,7 +154,6 @@ async function analisarProduto() {
     estado.conteudo = normalizarConteudo(payload.conteudo);
 
     renderizarResultados();
-
     marcarPasso(1);
 
     if ($('tituloProgresso')) {
@@ -197,25 +169,21 @@ async function analisarProduto() {
     console.error('Falha na geração:', erro);
 
     if ($('tituloProgresso')) {
-      $('tituloProgresso').textContent =
-        'NÃO FOI POSSÍVEL CONCLUIR';
+      $('tituloProgresso').textContent = 'NÃO FOI POSSÍVEL CONCLUIR';
     }
 
     mostrarToast(
       erro.name === 'AbortError'
         ? 'A análise demorou demais. Tente novamente.'
-        : erro.message ||
-          'Não foi possível gerar o cadastro com IA.'
+        : erro.message || 'Não foi possível gerar o cadastro com IA.'
     );
 
   } finally {
     clearTimeout(timer);
-
     btn.disabled = false;
     btn.textContent = textoOriginal;
   }
 }
-
 
 /* =========================================================
    RESPOSTA EM ETAPAS DA API
@@ -223,9 +191,7 @@ async function analisarProduto() {
 
 async function lerRespostaEmEtapas(resposta) {
   if (!resposta.body) {
-    throw new Error(
-      'O navegador não recebeu o conteúdo da API.'
-    );
+    throw new Error('O navegador não recebeu o conteúdo da API.');
   }
 
   const leitor = resposta.body.getReader();
@@ -242,9 +208,7 @@ async function lerRespostaEmEtapas(resposta) {
     try {
       evento = JSON.parse(linha);
     } catch {
-      throw new Error(
-        'A API retornou uma resposta incompleta.'
-      );
+      throw new Error('A API retornou uma resposta incompleta.');
     }
 
     if (evento.etapa === 'pagina_lida') {
@@ -252,9 +216,7 @@ async function lerRespostaEmEtapas(resposta) {
     } else if (evento.etapa === 'pronto') {
       resultado = evento.resultado;
     } else if (evento.etapa === 'erro') {
-      throw new Error(
-        evento.erro || 'Erro ao gerar produto.'
-      );
+      throw new Error(evento.erro || 'Erro ao gerar produto.');
     }
   }
 
@@ -264,9 +226,7 @@ async function lerRespostaEmEtapas(resposta) {
 
       if (done) break;
 
-      buffer += decoder.decode(value, {
-        stream: true
-      });
+      buffer += decoder.decode(value, { stream: true });
 
       let posicao;
 
@@ -283,9 +243,7 @@ async function lerRespostaEmEtapas(resposta) {
     }
 
     if (!resultado) {
-      throw new Error(
-        'A conexão terminou antes de gerar o produto.'
-      );
+      throw new Error('A conexão terminou antes de gerar o produto.');
     }
 
     return resultado;
@@ -295,13 +253,11 @@ async function lerRespostaEmEtapas(resposta) {
   }
 }
 
-
 /* =========================================================
-   NORMALIZAÇÃO DOS RESULTADOS
+   NORMALIZAÇÃO E RENDERIZAÇÃO
    ========================================================= */
 
-const texto = (v) =>
-  v == null ? '' : String(v).trim();
+const texto = (v) => (v == null ? '' : String(v).trim());
 
 function arrayParaTexto(v, separador) {
   if (Array.isArray(v)) {
@@ -316,14 +272,8 @@ function arrayParaTexto(v, separador) {
 
 function normalizarConteudo(c) {
   return {
-    palavras: arrayParaTexto(
-      c.palavrasChave || c.palavras,
-      ', '
-    ),
-    beneficios: arrayParaTexto(
-      c.beneficios,
-      '\n\n'
-    ),
+    palavras: arrayParaTexto(c.palavrasChave || c.palavras, ', '),
+    beneficios: arrayParaTexto(c.beneficios, '\n\n'),
     titulo: texto(c.titulo),
     subtitulo: texto(c.subtitulo),
     descricao: texto(c.descricao),
@@ -336,7 +286,6 @@ function normalizarConteudo(c) {
   };
 }
 
-
 /* =========================================================
    BOTÕES DOS RESULTADOS
    ========================================================= */
@@ -347,7 +296,6 @@ function criarBotao(rotulo, acao) {
   b.type = 'button';
   b.className = 'btn pequeno';
   b.textContent = rotulo;
-
   b.addEventListener('click', acao);
 
   return b;
@@ -358,21 +306,18 @@ function ajustarAltura(ta) {
   ta.style.height = ta.scrollHeight + 6 + 'px';
 }
 
-
 /* =========================================================
    RENDERIZAÇÃO DOS RESULTADOS
    ========================================================= */
 
 function renderizarResultados() {
   const wrap = $('listaResultados');
-
   if (!wrap) return;
 
   wrap.innerHTML = '';
 
   SECOES.forEach((secao) => {
     const bloco = document.createElement('div');
-
     bloco.className = 'secao';
 
     bloco.innerHTML = `
@@ -383,24 +328,18 @@ function renderizarResultados() {
       <div class="contador"></div>
     `;
 
-    bloco.querySelector('h3').textContent =
-      secao.titulo;
+    bloco.querySelector('h3').textContent = secao.titulo;
 
     const ta = bloco.querySelector('textarea');
-
     ta.id = 'res-' + secao.id;
     ta.value = estado.conteudo?.[secao.id] || '';
 
-    bloco.querySelector('.contador').id =
-      'cont-' + secao.id;
+    bloco.querySelector('.contador').id = 'cont-' + secao.id;
 
     bloco.querySelector('.secao-topo').appendChild(
       criarBotao(
         'COPIAR',
-        (ev) => copiarResultado(
-          ta.value,
-          ev.currentTarget
-        )
+        (ev) => copiarResultado(ta.value, ev.currentTarget)
       )
     );
 
@@ -418,10 +357,8 @@ function renderizarResultados() {
   });
 
   $('resultados')?.classList.remove('oculto');
-
   SECOES.forEach(atualizarContador);
 }
-
 
 /* =========================================================
    CONTADOR DE CARACTERES
@@ -440,33 +377,25 @@ function atualizarContador(secao) {
       `${n} / ${secao.limite} caracteres` +
       (n > secao.limite ? ' (acima do limite!)' : '');
 
-    c.classList.toggle(
-      'excedeu',
-      n > secao.limite
-    );
-
+    c.classList.toggle('excedeu', n > secao.limite);
   } else {
     const palavras = ta.value.trim()
       ? ta.value.trim().split(/\s+/).length
       : 0;
 
-    c.textContent =
-      `${n} caracteres · ${palavras} palavras`;
+    c.textContent = `${n} caracteres · ${palavras} palavras`;
   }
 }
-
 
 /* =========================================================
    PROGRESSO — APENAS PASSOS 0 E 1
    ========================================================= */
 
 function limparProgresso() {
-  document
-    .querySelectorAll('.passos li')
-    .forEach((li) => {
-      li.classList.remove('ok');
-      li.removeAttribute('aria-label');
-    });
+  document.querySelectorAll('.passos li').forEach((li) => {
+    li.classList.remove('ok');
+    li.removeAttribute('aria-label');
+  });
 }
 
 function marcarPasso(i) {
@@ -483,7 +412,6 @@ function marcarPasso(i) {
     );
   }
 }
-
 
 /* =========================================================
    NOTIFICAÇÕES
@@ -507,7 +435,6 @@ function mostrarToast(mensagem) {
   }, 4000);
 }
 
-
 /* =========================================================
    COPIAR RESULTADOS
    ========================================================= */
@@ -515,11 +442,10 @@ function mostrarToast(mensagem) {
 async function copiarResultado(valor, botao) {
   try {
     await navigator.clipboard.writeText(valor);
-
   } catch {
     const ta = document.createElement('textarea');
-
     ta.value = valor;
+
     document.body.appendChild(ta);
     ta.select();
 
@@ -547,31 +473,20 @@ function copiarTudo() {
     return mostrarToast('Gere um produto primeiro.');
   }
 
-  const completo = SECOES.map((s) => {
-    return (
-      `===== ${s.titulo.toUpperCase()} =====\n` +
-      ($('res-' + s.id)?.value || '')
-    );
-  }).join('\n\n');
+  const completo = SECOES.map((s) =>
+    `===== ${s.titulo.toUpperCase()} =====\n${$('res-' + s.id)?.value || ''}`
+  ).join('\n\n');
 
-  copiarResultado(
-    completo,
-    $('btnCopiarTudo')
-  );
+  copiarResultado(completo, $('btnCopiarTudo'));
 }
 
-
 /* =========================================================
-   BIBLIOTECA — PRODUTOS SALVOS
+   BIBLIOTECA — SALVAR, CARREGAR E LIMPAR
    ========================================================= */
 
 function lerSalvos() {
   try {
-    return (
-      JSON.parse(
-        localStorage.getItem(CONFIG.chaveStorage)
-      ) || {}
-    );
+    return JSON.parse(localStorage.getItem(CONFIG.chaveStorage)) || {};
   } catch {
     return {};
   }
@@ -579,16 +494,13 @@ function lerSalvos() {
 
 function atualizarListaSalvos(selecionado) {
   const select = $('produtosSalvos');
-
   if (!select) return;
 
   const chaves = Object.keys(lerSalvos());
-
   select.innerHTML = '';
 
   if (!chaves.length) {
-    select.innerHTML =
-      '<option value="">Nenhum produto salvo</option>';
+    select.innerHTML = '<option value="">Nenhum produto salvo</option>';
     return;
   }
 
@@ -597,9 +509,7 @@ function atualizarListaSalvos(selecionado) {
   );
 
   chaves.forEach((c) => {
-    select.appendChild(
-      new Option(c, c)
-    );
+    select.appendChild(new Option(c, c));
   });
 
   if (selecionado) {
@@ -607,24 +517,21 @@ function atualizarListaSalvos(selecionado) {
   }
 }
 
-
 /* =========================================================
    SALVAR PRODUTO
    ========================================================= */
 
 function salvarProduto() {
   if (!estado.conteudo || !estado.entrada) {
-    return mostrarToast(
-      'Gere um produto antes de salvar.'
-    );
+    return mostrarToast('Gere um produto antes de salvar.');
   }
 
   const campos = {};
 
   SECOES.forEach((s) => {
     campos[s.id] =
-      $('res-' + s.id)?.value ||
-      estado.conteudo[s.id] ||
+      $('res-' + s.id)?.value ??
+      estado.conteudo[s.id] ??
       '';
   });
 
@@ -639,10 +546,7 @@ function salvarProduto() {
     estado.entrada.sku ||
     '';
 
-  const chave = sku
-    ? `${sku} – ${nome}`
-    : nome;
-
+  const chave = sku ? `${sku} – ${nome}` : nome;
   const salvos = lerSalvos();
 
   salvos[chave] = {
@@ -659,30 +563,21 @@ function salvarProduto() {
     );
 
     atualizarListaSalvos(chave);
-
     mostrarToast('Produto salvo no navegador.');
-
   } catch {
-    mostrarToast(
-      'Não foi possível salvar o produto no navegador.'
-    );
+    mostrarToast('Não foi possível salvar o produto no navegador.');
   }
 }
-
 
 /* =========================================================
    CARREGAR PRODUTO
    ========================================================= */
 
 function carregarProduto() {
-  const salvo = lerSalvos()[
-    $('produtosSalvos')?.value
-  ];
+  const salvo = lerSalvos()[$('produtosSalvos')?.value];
 
   if (!salvo) {
-    return mostrarToast(
-      'Selecione um produto salvo.'
-    );
+    return mostrarToast('Selecione um produto salvo.');
   }
 
   estado.entrada = salvo.entrada || {};
@@ -697,31 +592,23 @@ function carregarProduto() {
     }
   });
 
-  if (
-    $('entradaManual') &&
-    (
+  if ($('entradaManual')) {
+    $('entradaManual').open = Boolean(
       estado.entrada.nome ||
       estado.entrada.sku ||
       estado.entrada.info
-    )
-  ) {
-    $('entradaManual').open = true;
+    );
   }
 
   renderizarResultados();
-
   mostrarToast('Produto carregado.');
 }
-
 
 /* =========================================================
    LIMPAR PRODUTO
    ========================================================= */
 
-function limparProduto(
-  confirmar = true,
-  rolarTopo = true
-) {
+function limparProduto(confirmar = true, rolarTopo = true) {
   if (
     confirmar &&
     estado.conteudo &&
@@ -757,8 +644,7 @@ function limparProduto(
   limparProgresso();
 
   if ($('tituloProgresso')) {
-    $('tituloProgresso').textContent =
-      'ANALISANDO PRODUTO...';
+    $('tituloProgresso').textContent = 'ANALISANDO PRODUTO...';
   }
 
   if (rolarTopo) {
@@ -771,14 +657,11 @@ function limparProduto(
   return true;
 }
 
-
 /* =========================================================
    NOVO PRODUTO — BOTÃO DO HEADER
    ========================================================= */
 
 function novoProduto() {
-
-  // Impede limpar enquanto o Gemini está gerando.
   if ($('btnAnalisar')?.disabled) {
     mostrarToast(
       'Aguarde a análise terminar antes de iniciar outro produto.'
@@ -786,129 +669,130 @@ function novoProduto() {
     return;
   }
 
-  // Verifica se existe conteúdo ou dados preenchidos.
   const possuiCadastroAberto = Boolean(
     estado.conteudo ||
-    ['url', 'nome', 'sku', 'info'].some(
-      (id) => valorDe(id)
-    )
+    ['url', 'nome', 'sku', 'info'].some((id) => valorDe(id))
   );
 
-  // Confirma antes de descartar o cadastro atual.
-  if (possuiCadastroAberto) {
-    const confirmou = window.confirm(
+  if (
+    possuiCadastroAberto &&
+    !window.confirm(
       'Deseja iniciar um novo produto?\n\n' +
       'As alterações não salvas serão perdidas.'
-    );
-
-    if (!confirmou) return;
+    )
+  ) {
+    return;
   }
 
-  // Limpa o cadastro, preservando a biblioteca.
   limparProduto(false, false);
 
-  // Leva automaticamente ao formulário.
-  const entrada = $('entrada');
-  const url = $('url');
+  $('entrada')?.scrollIntoView({
+    behavior: 'smooth',
+    block: 'start'
+  });
 
-  if (entrada) {
-    entrada.scrollIntoView({
-      behavior: 'smooth',
-      block: 'start'
-    });
-  }
-
-  // Posiciona o cursor para digitar a nova URL.
-  if (url) {
-    url.focus({
-      preventScroll: true
-    });
-  }
+  $('url')?.focus({ preventScroll: true });
 }
 
+/* =========================================================
+   VOLTAR AO TOPO — BOTÃO FLUTUANTE
+   ========================================================= */
+
+function iniciarVoltarAoTopo() {
+  const botao = $('backToTop');
+
+  // Não interfere no gerador se o botão não existir.
+  if (!botao) return;
+
+  function atualizarVisibilidade() {
+    // Aparece depois de rolar 300 pixels.
+    const visivel = window.scrollY > 300;
+
+    botao.classList.toggle('is-visible', visivel);
+
+    botao.setAttribute(
+      'aria-hidden',
+      String(!visivel)
+    );
+
+    botao.tabIndex = visivel ? 0 : -1;
+  }
+
+  // Ação ao clicar no botão.
+  botao.addEventListener('click', () => {
+    const movimentoReduzido = window.matchMedia?.(
+      '(prefers-reduced-motion: reduce)'
+    ).matches;
+
+    window.scrollTo({
+      top: 0,
+      behavior: movimentoReduzido ? 'auto' : 'smooth'
+    });
+  });
+
+  // Verifica a rolagem da página.
+  window.addEventListener(
+    'scroll',
+    atualizarVisibilidade,
+    { passive: true }
+  );
+
+  // Configura o estado inicial do botão.
+  atualizarVisibilidade();
+}
 
 /* =========================================================
    TRATAMENTO DE ERROS
    ========================================================= */
 
 window.addEventListener('error', (e) => {
-  mostrarToast(
-    'Erro no script: ' + e.message
-  );
+  mostrarToast('Erro no script: ' + e.message);
 });
 
 window.addEventListener('unhandledrejection', (e) => {
   mostrarToast(
-    'Erro: ' +
-    (e.reason?.message || e.reason)
+    'Erro: ' + (e.reason?.message || e.reason)
   );
 });
-
 
 /* =========================================================
    INICIALIZAÇÃO DO SISTEMA
    ========================================================= */
 
 function iniciar() {
+  ligar('btnAnalisar', 'click', analisarProduto);
 
-  // Gerador de produtos
-  ligar(
-    'btnAnalisar',
-    'click',
-    analisarProduto
-  );
+  ligar('btnCopiarTudo', 'click', copiarTudo);
 
-  // Copiar os resultados
-  ligar(
-    'btnCopiarTudo',
-    'click',
-    copiarTudo
-  );
+  ligar('btnSalvar', 'click', salvarProduto);
 
-  // Biblioteca
-  ligar(
-    'btnSalvar',
-    'click',
-    salvarProduto
-  );
+  ligar('btnCarregar', 'click', carregarProduto);
 
-  ligar(
-    'btnCarregar',
-    'click',
-    carregarProduto
-  );
-
-  // Limpeza manual
   ligar(
     'btnLimparEntrada',
     'click',
     () => limparProduto(true)
   );
 
-  // BOTÃO NOVO PRODUTO DO HEADER
-  ligar(
-    'btnNovo',
-    'click',
-    novoProduto
-  );
+  ligar('btnNovo', 'click', novoProduto);
 
-  // Gerar pressionando Enter no campo URL
   ligar('url', 'keydown', (e) => {
     if (e.key === 'Enter') {
       analisarProduto();
     }
   });
 
-  // Carrega os produtos salvos na biblioteca
   atualizarListaSalvos();
+
+  // Inicializa o botão de voltar ao topo.
+  iniciarVoltarAoTopo();
 
   console.log(
     'B.live In Pets: Gerador Inteligente carregado.'
   );
 }
 
-
-// Inicializa quando o HTML estiver pronto.
+// Inicialização automática.
 if (document.readyState === 'loading') {
   document.addEventListener(
     'DOMContentLoaded',
