@@ -1,63 +1,190 @@
+
 <!DOCTYPE html>
 <html lang="pt-BR">
-
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>B.live In Pets | Gerador Inteligente de Produtos</title>
-  <link rel="icon" type="image/png" href="/logo/images.jpg">
+  <meta name="theme-color" content="#23152d">
+  <meta name="description" content="Painel interno B.live in Pets para criação e otimização de cadastros de produtos.">
+  <title>B.live Intelligence | Gerador Inteligente de Produtos</title>
+  <link rel="icon" type="image/jpeg" href="/logo/images.jpg">
   <link rel="stylesheet" href="/css-principal/index.css">
 </head>
-
 <body>
-  <header class="topo">
-    <div class="logo">
-      <img src="/logo/images.jpg" alt="B.live In Pets">
+  <div class="app-shell">
+    <!-- NAVEGAÇÃO LATERAL -->
+    <aside class="sidebar" aria-label="Menu principal">
+      <a class="marca" href="#inicio" aria-label="B.live Intelligence - página inicial">
+        <span class="marca-logo"><img src="/logo/images.jpg" alt="Logo B.live In Pets"></span>
+        <span class="marca-texto"><strong>B.live<span> Intelligence</span></strong><small>PRODUCT STUDIO</small></span>
+      </a>
+
+      <div class="sidebar-grupo">
+        <p class="sidebar-titulo">WORKSPACE</p>
+        <nav class="menu" aria-label="Seções do aplicativo">
+          <a class="menu-link ativo" href="#inicio">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>
+            <span>Painel inicial</span>
+          </a>
+          <a class="menu-link" href="#entrada">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/><circle cx="12" cy="12" r="9"/></svg>
+            <span>Novo cadastro</span>
+          </a>
+          <a class="menu-link" href="#resultados">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M9 8h6M9 12h6M9 16h4"/></svg>
+            <span>Editor de conteúdo</span>
+          </a>
+          <a class="menu-link" href="#biblioteca">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 7a2 2 0 0 1 2-2h5l2 2h7a2 2 0 0 1 2 2v10H3z"/><path d="M3 10h18"/></svg>
+            <span>Biblioteca</span>
+          </a>
+        </nav>
+      </div>
+
+      <div class="sidebar-rodape">
+        <span class="sidebar-ponto" aria-hidden="true"></span>
+        <div><strong>Ambiente interno</strong><small>B.live in Pets</small></div>
+      </div>
+    </aside>
+
+    <div class="app-corpo">
+      <!-- TOPO -->
+      <header class="topbar">
+        <div class="topbar-trilha"><span>Workspace</span><span class="separador">/</span><strong>Product Studio</strong></div>
+        <button class="btn btn-topo" type="button" id="btnNovo">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>
+          Novo produto
+        </button>
+      </header>
+
+      <main class="conteudo" id="inicio">
+        <!-- APRESENTAÇÃO -->
+        <section class="hero" aria-labelledby="pagina-titulo">
+          <div class="hero-texto">
+            <p class="eyebrow"><span class="eyebrow-ponto"></span> INTELIGÊNCIA PARA E-COMMERCE</p>
+            <h1 id="pagina-titulo">Seu catálogo, <span>mais inteligente.</span></h1>
+            <p class="hero-descricao">Transforme informações reais dos produtos B.live em conteúdos prontos para revisar e publicar no site e nos marketplaces.</p>
+            <div class="hero-tags" aria-label="Recursos do gerador">
+              <span>SEO + GEO</span><span>9 campos de conteúdo</span><span>Site e marketplaces</span>
+            </div>
+          </div>
+          <div class="hero-grafico" aria-hidden="true">
+            <div class="hero-orbita orbita-a"></div><div class="hero-orbita orbita-b"></div>
+            <div class="hero-emblema">B<span>.</span></div>
+            <div class="hero-placa placa-a"><span>✦</span> Conteúdo inteligente</div>
+            <div class="hero-placa placa-b">SEO <span>●</span> GEO</div>
+          </div>
+        </section>
+
+        <!-- GERAÇÃO -->
+        <section class="painel painel-entrada" id="entrada" aria-labelledby="entrada-titulo">
+          <div class="painel-cabecalho">
+            <div class="cabecalho-icone" aria-hidden="true">
+              <svg viewBox="0 0 24 24"><path d="m12 3 1.6 5.4L19 10l-5.4 1.6L12 17l-1.6-5.4L5 10l5.4-1.6zM19 17l.7 2.3L22 20l-2.3.7L19 23l-.7-2.3L16 20l2.3-.7z"/></svg>
+            </div>
+            <div class="painel-titulos">
+              <p class="sobretitulo">COMECE POR AQUI</p>
+              <h2 id="entrada-titulo">Gerar cadastro de produto</h2>
+              <p>Informe a URL e deixe o sistema preparar os conteúdos da B.live.</p>
+            </div>
+          </div>
+
+          <div class="entrada-bloco">
+            <label class="campo-rotulo" for="url">URL do produto <span aria-hidden="true">*</span></label>
+            <div class="campo-url">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 13a5 5 0 0 0 7.5.5l3-3a5 5 0 0 0-7.1-7.1l-1.7 1.7M14 11a5 5 0 0 0-7.5-.5l-3 3a5 5 0 0 0 7.1 7.1l1.7-1.7"/></svg>
+              <input id="url" type="url" autocomplete="url" spellcheck="false" placeholder="https://www.bliveinpets.com.br/nome-do-produto" aria-describedby="ajuda-url">
+            </div>
+            <p class="ajuda" id="ajuda-url">O gerador lê a página e combina os dados com a base de conhecimento da B.live. Informações técnicas não confirmadas não devem ser inventadas.</p>
+          </div>
+
+          <!-- O JavaScript atual já entende nome, SKU e info. -->
+          <details class="entrada-manual" id="entradaManual">
+            <summary>Produto novo ou sem URL <span>Preencher dados manualmente</span></summary>
+            <div class="manual-conteudo">
+              <div class="manual-grid">
+                <div><label class="campo-rotulo" for="nome">Nome do produto</label><input id="nome" type="text" placeholder="Ex.: Regata Pet Frufru Rosa"></div>
+                <div><label class="campo-rotulo" for="sku">Referência / SKU</label><input id="sku" type="text" placeholder="Ex.: 90341"></div>
+              </div>
+              <div><label class="campo-rotulo" for="info">Informações confirmadas</label><textarea id="info" rows="4" placeholder="Informe o tecido, composição, cores, tamanhos e outros detalhes confirmados."></textarea></div>
+            </div>
+          </details>
+
+          <div class="entrada-acoes">
+            <button type="button" id="btnAnalisar" class="btn btn-principal">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m12 3 1.7 5.3L19 10l-5.3 1.7L12 17l-1.7-5.3L5 10l5.3-1.7z"/><path d="m19 17 .6 1.4L21 19l-1.4.6L19 21l-.6-1.4L17 19l1.4-.6z"/></svg>
+              ANALISAR E GERAR CADASTRO
+            </button>
+            <button type="button" id="btnLimparEntrada" class="btn btn-discreto">Limpar campos</button>
+          </div>
+        </section>
+
+        <!-- SOMENTE DOIS PASSOS, COMO SOLICITADO -->
+        <section class="painel progresso oculto" id="progresso" aria-live="polite" aria-labelledby="tituloProgresso">
+          <div class="progresso-cabecalho"><span class="indicador-pulso" aria-hidden="true"></span><h2 id="tituloProgresso">ANALISANDO PRODUTO...</h2></div>
+          <ul class="passos"><li id="passo0">Lendo a página e identificando o produto</li><li id="passo1">Pronto!</li></ul>
+        </section>
+
+        <!-- EDITOR: a navegação de abas funciona apenas com HTML e CSS -->
+        <section class="area-editor oculto" id="resultados" aria-labelledby="editor-titulo">
+          <div class="titulo-linha">
+            <div><p class="sobretitulo">CADASTRO GERADO</p><h2 id="editor-titulo">Editor inteligente</h2><p>Revise, ajuste e copie os conteúdos do produto.</p></div>
+            <div class="acoes-editor">
+              <button type="button" class="btn btn-discreto btn-borda" id="btnCopiarTudo">Copiar tudo</button>
+              <button type="button" class="btn btn-principal btn-salvar" id="btnSalvar">Salvar na biblioteca</button>
+            </div>
+          </div>
+
+          <div class="editor-workspace">
+            <input class="radio-aba" type="radio" name="editor-view" id="tab-site" checked>
+            <input class="radio-aba" type="radio" name="editor-view" id="tab-marketplaces">
+            <input class="radio-aba" type="radio" name="editor-view" id="tab-seo">
+            <input class="radio-aba" type="radio" name="editor-view" id="tab-imagens">
+            <div class="abas" aria-label="Filtrar campos de resultado">
+              <label for="tab-site">Site B.live</label>
+              <label for="tab-marketplaces">Marketplaces</label>
+              <label for="tab-seo">SEO / GEO</label>
+              <label for="tab-imagens">Imagens <span class="mini-novo">GUIA</span></label>
+            </div>
+            <div class="abas-conteudo">
+              <div class="editor-introducao"><span class="editor-circulo" aria-hidden="true">✦</span><p>Os campos abaixo são <strong>editáveis</strong>. Use o botão <strong>COPIAR</strong> em cada seção ou salve o cadastro na biblioteca.</p></div>
+              <!-- O JS atual injeta automaticamente as nove .secao aqui. -->
+              <div id="listaResultados" class="lista-resultados"></div>
+              <div class="guia-imagens">
+                <div class="guia-cabecalho"><span class="guia-icone" aria-hidden="true">▧</span><div><h3>Planejamento de imagens</h3><p>Referência visual para organizar a galeria de cada produto B.live.</p></div></div>
+                <div class="guia-lista">
+                  <div><span>01</span><strong>Imagem principal</strong><small>Produto em destaque, fundo limpo.</small></div>
+                  <div><span>02</span><strong>Produto em uso</strong><small>Mostre a peça vestida em um pet.</small></div>
+                  <div><span>03</span><strong>Outro ângulo</strong><small>Costas, lateral ou visão complementar.</small></div>
+                  <div><span>04</span><strong>Detalhes</strong><small>Tecido, acabamento e fechamento, quando aplicável.</small></div>
+                  <div><span>05</span><strong>Tabela de medidas</strong><small>Dimensões corretas para orientar a compra.</small></div>
+                </div>
+                <p class="guia-nota">Esta aba é um guia de organização. A geração automática de nomes de imagens e ALT text ainda depende de uma implementação futura no JavaScript.</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- BIBLIOTECA LOCAL: aproveita salvar/carregar do JS existente -->
+        <section class="painel biblioteca" id="biblioteca" aria-labelledby="biblioteca-titulo">
+          <div class="painel-cabecalho biblioteca-cabecalho">
+            <div class="cabecalho-icone icone-biblioteca" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M3 7a2 2 0 0 1 2-2h5l2 2h7a2 2 0 0 1 2 2v10H3z"/><path d="M3 10h18"/></svg></div>
+            <div class="painel-titulos"><p class="sobretitulo">SEUS RASCUNHOS</p><h2 id="biblioteca-titulo">Biblioteca de produtos</h2><p>Continue a edição de um produto já salvo sem gerar tudo novamente.</p></div>
+          </div>
+          <div class="biblioteca-controles">
+            <div class="biblioteca-select"><label class="campo-rotulo" for="produtosSalvos">Cadastros salvos neste navegador</label><select id="produtosSalvos"><option value="">Nenhum produto salvo</option></select></div>
+            <button type="button" class="btn btn-principal" id="btnCarregar">Abrir cadastro</button>
+          </div>
+          <p class="biblioteca-aviso">Os rascunhos ficam armazenados localmente neste navegador. Eles não são sincronizados entre computadores.</p>
+        </section>
+
+        <footer class="rodape"><span>© B.live in Pets</span><span>Product Studio · Ferramenta interna de conteúdo</span></footer>
+      </main>
     </div>
-    <div class="wrap-1">
-      <h1>Gerador Inteligente de Produtos</h1>
-    </div>
-  </header>
-
-  <main class="wrap-2">
-    <section class="card" id="entrada">
-      <label>URL do produto *
-        <input id="url" type="url" autocomplete="url" placeholder="https://www.bliveinpets.com.br/produto-exemplo">
-      </label>
-
-      <p class="ajuda">
-        Cole a URL do produto da B.live. O sistema irá ler a página, cruzar as informações com o banco de conhecimento
-        da marca e gerar o conteúdo com IA.
-      </p>
-
-      <div class="acoes" style="margin-top: 18px;">
-        <button type="button" id="btnAnalisar" class="btn principal">ANALISAR E GERAR CADASTRO</button>
-    </section>
-
-    <section class="card oculto" id="progresso">
-      <h2>ANALISANDO PRODUTO...</h2>
-      <ul class="passos">
-        <li id="passo0">Lendo a página e identificando o produto</li>
-        <li id="passo1">Cruzando com o conhecimento da B.live</li>
-        <li id="passo2">Criando conteúdo de e-commerce</li>
-        <li id="passo3">Otimizando SEO e GEO</li>
-        <li id="passo4">Finalizando conteúdos de marketplace</li>
-        <li id="passo5">Pronto.</li>
-      </ul>
-    </section>
-
-    <section class="card pendencias oculto" id="avisos">
-      <h2>Atenção</h2>
-      <div id="listaAvisos"></div>
-    </section>
-
-    <section class="oculto" id="resultados">
-      <div id="listaResultados"></div>
-    </section>
-  </main>
+  </div>
 
   <div id="toast" class="toast" role="status" aria-live="polite"></div>
+  <!-- Mantém a integração com o JavaScript já utilizado no projeto. -->
   <script type="module" src="/js/index.js"></script>
 </body>
-
 </html>
