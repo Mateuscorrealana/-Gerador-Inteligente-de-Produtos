@@ -1460,3 +1460,73 @@ textarea {
   transform: translateY(-3px);
   background: #ad519e;
 }
+
+
+/* ==============================================
+   B.LIVE — EXCLUIR PRODUTO DA BIBLIOTECA
+   DARK MODE
+   ============================================== */
+
+.btn-excluir-produto {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+
+  min-height: 44px;
+  min-width: 115px;
+
+  padding: 10px 16px;
+
+  background: #5b303d;
+  color: #ffd7dc;
+
+  border: 1px solid #b96b7a;
+  border-radius: 10px;
+
+  font-size: 12px;
+  font-weight: 750;
+
+  transition:
+    background .2s ease,
+    border-color .2s ease,
+    transform .2s ease;
+}
+
+.btn-excluir-produto svg {
+  width: 18px;
+  height: 18px;
+  flex: 0 0 18px;
+  stroke: currentColor;
+  fill: none;
+}
+
+.btn-excluir-produto:not(:disabled):hover {
+  background: #813e4d;
+  color: #ffffff;
+  border-color: #f29aaa;
+  transform: translateY(-1px);
+}
+
+.btn-excluir-produto:disabled {
+  opacity: .45;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.btn-excluir-produto:focus-visible {
+  outline: 3px solid #f29aaa;
+  outline-offset: 3px;
+}
+
+/* Responsividade */
+
+@media (max-width: 600px) {
+
+  .btn-excluir-produto {
+    width: 100%;
+    min-height: 46px;
+    justify-content: center;
+  }
+
+}

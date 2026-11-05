@@ -221,7 +221,7 @@ async function lerRespostaEmEtapas(resposta) {
   }
 
   try {
-    for (;;) {
+    for (; ;) {
       const { value, done } = await leitor.read();
 
       if (done) break;
@@ -492,15 +492,28 @@ function lerSalvos() {
   }
 }
 
+
 function atualizarListaSalvos(selecionado) {
+
   const select = $('produtosSalvos');
+  const botaoExcluir = $('btnExcluirProduto');
+
   if (!select) return;
 
   const chaves = Object.keys(lerSalvos());
+
   select.innerHTML = '';
 
   if (!chaves.length) {
-    select.innerHTML = '<option value="">Nenhum produto salvo</option>';
+
+    select.appendChild(
+      new Option('Nenhum produto salvo', '')
+    );
+
+    if (botaoExcluir) {
+      botaoExcluir.disabled = true;
+    }
+
     return;
   }
 
@@ -508,12 +521,18 @@ function atualizarListaSalvos(selecionado) {
     new Option('Selecione um produto salvo', '')
   );
 
-  chaves.forEach((c) => {
-    select.appendChild(new Option(c, c));
+  chaves.forEach((chave) => {
+    select.appendChild(
+      new Option(chave, chave)
+    );
   });
 
-  if (selecionado) {
+  if (selecionado && chaves.includes(selecionado)) {
     select.value = selecionado;
+  }
+
+  if (botaoExcluir) {
+    botaoExcluir.disabled = !select.value;
   }
 }
 
@@ -603,6 +622,78 @@ function carregarProduto() {
   renderizarResultados();
   mostrarToast('Produto carregado.');
 }
+
+
+/* ==============================================
+   EXCLUIR PRODUTO SALVO DA BIBLIOTECA
+   ============================================== */
+
+function excluirProdutoSalvo() {
+
+  const select = $('produtosSalvos');
+
+  const chave = select?.value;
+
+  if (!chave) {
+    mostrarToast(
+      'Selecione um produto para excluir.'
+    );
+    return;
+  }
+
+  const salvos = lerSalvos();
+
+  if (!Object.prototype.hasOwnProperty.call(salvos, chave)) {
+    atualizarListaSalvos();
+
+    mostrarToast(
+      'Esse produto não foi encontrado na biblioteca.'
+    );
+
+    return;
+  }
+
+  // Confirmação antes de apagar
+  const confirmar = window.confirm(
+    `Deseja realmente excluir este produto?\n\n` +
+    `${chave}\n\n` +
+    `O cadastro salvo será apagado deste navegador. ` +
+    `Esta ação não pode ser desfeita.`
+  );
+
+  if (!confirmar) return;
+
+  // Exclui somente o produto selecionado
+  delete salvos[chave];
+
+  try {
+
+    localStorage.setItem(
+      CONFIG.chaveStorage,
+      JSON.stringify(salvos)
+    );
+
+    // Atualiza a biblioteca
+    atualizarListaSalvos();
+
+    mostrarToast(
+      'Produto excluído da biblioteca com sucesso!'
+    );
+
+  } catch (erro) {
+
+    console.error(
+      'Erro ao excluir produto:',
+      erro
+    );
+
+    mostrarToast(
+      'Não foi possível excluir o produto.'
+    );
+
+  }
+}
+
 
 /* =========================================================
    LIMPAR PRODUTO
@@ -767,6 +858,28 @@ function iniciar() {
   ligar('btnSalvar', 'click', salvarProduto);
 
   ligar('btnCarregar', 'click', carregarProduto);
+
+
+  // Excluir produto selecionado
+  ligar(
+    'btnExcluirProduto',
+    'click',
+    excluirProdutoSalvo
+  );
+
+  // Habilitar a lixeira ao selecionar um produto
+  ligar(
+    'produtosSalvos',
+    'change',
+    () => {
+      const botao = $('btnExcluirProduto');
+
+      if (botao) {
+        botao.disabled = !valorDe('produtosSalvos');
+      }
+    }
+  );
+
 
   ligar(
     'btnLimparEntrada',
