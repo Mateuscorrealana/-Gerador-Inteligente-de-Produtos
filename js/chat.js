@@ -9,7 +9,7 @@ import {
   auth,
   db,
   googleProvider
-} from './firebase-config.js';
+} from './firebase.config.js';
 
 import {
   onAuthStateChanged,
