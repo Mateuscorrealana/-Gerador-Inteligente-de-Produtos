@@ -1,9 +1,18 @@
 
 'use strict';
 
-// B.live Intelligence — Chat em tempo real com Firebase Firestore.
-// Acesso: Google Authentication + regras de segurança.
-// Não misturar com o script antigo de teste local.
+/* =========================================================
+   B.live Intelligence — Chat único em tempo real
+   Firebase Authentication + Cloud Firestore
+
+   Recursos:
+   - Responder mensagens específicas
+   - Excluir somente mensagens próprias
+   - Buscar mensagens
+   - Emojis e figurinhas
+
+   Mantém o histórico da antiga sala "geral".
+   ========================================================= */
 
 import {
   auth,
@@ -20,6 +29,8 @@ import {
 import {
   addDoc,
   collection,
+  deleteDoc,
+  doc,
   limit,
   onSnapshot,
   orderBy,
@@ -29,28 +40,31 @@ import {
 
 const $ = (id) => document.getElementById(id);
 
-const SALAS = new Set([
-  'geral',
-  'produtos',
-  'marketplaces',
-  'campanhas',
-  'pendencias'
-]);
+// Reutiliza o histórico da sala Geral.
+// As mensagens dos outros canais antigos não são apagadas.
+const CAMINHO = ['salas', 'geral', 'mensagens'];
 
-const MAX_MENSAGENS = 100;
+const LIMITE_HISTORICO = 100;
 
-let salaAtual = 'geral';
 let usuarioAtual = null;
 let mensagensAtuais = [];
 let cancelarEscuta = null;
+
+// Mensagem escolhida para responder.
+let mensagemRespondida = null;
+
+// Controle de envio e exclusão.
 let enviando = false;
-let temporizadorToast;
+let excluindo = new Set();
+
+let temporizadorToast = null;
+
 
 /* =========================================================
    NOTIFICAÇÕES
    ========================================================= */
 
-function toast(mensagem) {
+function mostrarToast(mensagem) {
   const elemento = $('chatToast');
 
   if (!elemento) return;
@@ -65,41 +79,45 @@ function toast(mensagem) {
   }, 4000);
 }
 
+
 /* =========================================================
    STATUS DA CONEXÃO
    ========================================================= */
 
-function status(texto, tipo = '') {
+function definirStatus(rotulo, tipo = '') {
   const elemento = $('chatStatus');
 
   if (!elemento) return;
 
-  const rotulo = elemento.querySelector('.status-text');
+  const texto = elemento.querySelector('.status-text');
 
-  if (rotulo) {
-    rotulo.textContent = texto;
+  if (texto) {
+    texto.textContent = rotulo;
   }
 
   elemento.dataset.estado = tipo;
 }
 
+
 /* =========================================================
-   TELAS DE LOGIN E CHAT
+   LOGIN E CHAT
    ========================================================= */
 
-function mostrarAcesso(mensagem) {
+function exibirLogin(mensagem) {
   $('authPanel').hidden = false;
   $('chatApp').hidden = true;
+
   $('authInfo').textContent = mensagem;
 }
 
-function mostrarChat() {
+function exibirChat() {
   $('authPanel').hidden = true;
   $('chatApp').hidden = false;
 }
 
+
 /* =========================================================
-   CONTROLE DE SINCRONIZAÇÃO
+   SINCRONIZAÇÃO
    ========================================================= */
 
 function pararEscuta() {
@@ -111,11 +129,12 @@ function pararEscuta() {
   mensagensAtuais = [];
 }
 
+
 /* =========================================================
-   FORMATAÇÃO DAS MENSAGENS
+   FORMATAÇÃO
    ========================================================= */
 
-function horaBrasileira(timestamp) {
+function formatarHora(timestamp) {
   const data = timestamp?.toDate?.();
 
   return data
@@ -126,41 +145,315 @@ function horaBrasileira(timestamp) {
     : 'Enviando…';
 }
 
-function mensagemVisual(item) {
-  const propria = item.autorUid === usuarioAtual?.uid;
+function encurtar(texto, tamanho = 180) {
+  const valor = String(texto || '')
+    .replace(/\s+/g, ' ')
+    .trim();
+
+  return valor.length > tamanho
+    ? valor.slice(0, tamanho - 1) + '…'
+    : valor;
+}
+
+function buscarMensagem(id) {
+  return mensagensAtuais.find(
+    (item) => item.id === id
+  ) || null;
+}
+
+
+/* =========================================================
+   CRIAR ÍCONES SVG
+   ========================================================= */
+
+function criarIcone(idIcone) {
+  const svg = document.createElementNS(
+    'http://www.w3.org/2000/svg',
+    'svg'
+  );
+
+  svg.setAttribute('class', 'ico');
+  svg.setAttribute('aria-hidden', 'true');
+
+  const use = document.createElementNS(
+    'http://www.w3.org/2000/svg',
+    'use'
+  );
+
+  use.setAttribute('href', '#' + idIcone);
+
+  svg.appendChild(use);
+
+  return svg;
+}
+
+
+/* =========================================================
+   RESPONDER UMA MENSAGEM
+   ========================================================= */
+
+function atualizarBarraResposta() {
+  const barra = $('replyPreview');
+
+  const mensagem = mensagemRespondida?.id
+    ? buscarMensagem(mensagemRespondida.id)
+    : null;
+
+  if (!mensagemRespondida) {
+    barra.hidden = true;
+    return;
+  }
+
+  barra.hidden = false;
+
+  $('replyAuthor').textContent = mensagem
+    ? (
+        'Respondendo a ' +
+        (
+          mensagem.autorUid === usuarioAtual?.uid
+            ? 'você'
+            : (mensagem.autorNome || 'colaborador')
+        )
+      )
+    : 'Respondendo a uma mensagem';
+
+  $('replyText').textContent = mensagem
+    ? encurtar(mensagem.texto, 165)
+    : 'Mensagem original excluída ou fora do histórico recente';
+}
+
+function selecionarResposta(item) {
+  mensagemRespondida = {
+    id: item.id
+  };
+
+  atualizarBarraResposta();
+
+  $('messageInput').focus({
+    preventScroll: true
+  });
+
+  $('composer').scrollIntoView({
+    behavior: 'smooth',
+    block: 'nearest'
+  });
+}
+
+function cancelarResposta() {
+  mensagemRespondida = null;
+  atualizarBarraResposta();
+}
+
+
+/* =========================================================
+   IR ATÉ A MENSAGEM ORIGINAL
+   ========================================================= */
+
+function irParaMensagem(id) {
+  const busca = $('messageSearch');
+
+  // Remove o filtro caso ele esteja escondendo
+  // a mensagem original.
+  if (busca.value) {
+    busca.value = '';
+    renderizar();
+  }
+
+  const original = document.getElementById(
+    'msg-' + id
+  );
+
+  if (!original) {
+    mostrarToast(
+      'A mensagem original foi excluída ou não está entre as últimas 100.'
+    );
+
+    return;
+  }
+
+  original.scrollIntoView({
+    behavior: 'smooth',
+    block: 'center'
+  });
+
+  original.classList.add('mensagem-destacada');
+
+  setTimeout(() => {
+    original.classList.remove('mensagem-destacada');
+  }, 1800);
+}
+
+
+/* =========================================================
+   BOTÕES DE AÇÃO
+   ========================================================= */
+
+function criarBotaoAcao(
+  rotulo,
+  icone,
+  acao,
+  extra = ''
+) {
+  const botao = document.createElement('button');
+
+  botao.type = 'button';
+
+  botao.className =
+    'acao-mensagem' +
+    (extra ? ' ' + extra : '');
+
+  botao.setAttribute(
+    'aria-label',
+    rotulo
+  );
+
+  botao.title = rotulo;
+
+  botao.appendChild(
+    criarIcone(icone)
+  );
+
+  const texto = document.createElement('span');
+
+  texto.textContent = rotulo;
+
+  botao.appendChild(texto);
+
+  botao.addEventListener('click', acao);
+
+  return botao;
+}
+
+
+/* =========================================================
+   CITAÇÃO DE UMA MENSAGEM
+   ========================================================= */
+
+function criarCitacao(idOriginal) {
+  if (!idOriginal) return null;
+
+  const original = buscarMensagem(idOriginal);
+
+  const botao = document.createElement('button');
+
+  botao.type = 'button';
+  botao.className = 'citacao-mensagem';
+  botao.title = 'Ir para a mensagem original';
+
+  const autor = document.createElement('strong');
+  const resumo = document.createElement('span');
+
+  autor.textContent = original
+    ? (
+        original.autorUid === usuarioAtual?.uid
+          ? 'Você'
+          : (original.autorNome || 'Colega')
+      )
+    : 'Mensagem anterior';
+
+  resumo.textContent = original
+    ? encurtar(original.texto, 140)
+    : 'Mensagem excluída ou fora das últimas 100';
+
+  botao.append(autor, resumo);
+
+  botao.addEventListener('click', () => {
+    irParaMensagem(idOriginal);
+  });
+
+  return botao;
+}
+
+
+/* =========================================================
+   CRIAR BALÃO DE MENSAGEM
+   ========================================================= */
+
+function criarMensagemVisual(item) {
+  const propria =
+    item.autorUid === usuarioAtual?.uid;
 
   const linha = document.createElement('div');
 
   linha.className =
-    'mensagem-linha' + (propria ? '' : ' recebida');
+    'mensagem-linha' +
+    (propria ? '' : ' recebida');
+
+  linha.id = 'msg-' + item.id;
 
   const bolha = document.createElement('article');
 
   bolha.className =
-    'mensagem-bolha' + (item.figurinha ? ' figurinha' : '');
+    'mensagem-bolha' +
+    (item.figurinha ? ' figurinha' : '');
 
+  // Autor e horário
   const cabecalho = document.createElement('div');
   cabecalho.className = 'mensagem-dados';
 
-  const nome = document.createElement('strong');
+  const autor = document.createElement('strong');
 
-  nome.textContent = propria
+  autor.textContent = propria
     ? 'Você'
     : (item.autorNome || 'Colega');
 
-  const horario = document.createElement('time');
-  horario.textContent = horaBrasileira(item.criadoEm);
+  const hora = document.createElement('time');
 
-  cabecalho.append(nome, horario);
+  hora.textContent = formatarHora(item.criadoEm);
 
+  cabecalho.append(autor, hora);
+  bolha.appendChild(cabecalho);
+
+  // Mensagem respondida
+  if (
+    typeof item.respondeA === 'string' &&
+    item.respondeA
+  ) {
+    bolha.appendChild(
+      criarCitacao(item.respondeA)
+    );
+  }
+
+  // Texto da mensagem
   const conteudo = document.createElement('p');
+
   conteudo.textContent = item.texto || '';
 
-  bolha.append(cabecalho, conteudo);
+  bolha.appendChild(conteudo);
+
+  // Área dos botões
+  const acoes = document.createElement('div');
+  acoes.className = 'mensagem-acoes';
+
+  // Botão responder
+  acoes.appendChild(
+    criarBotaoAcao(
+      'Responder',
+      'ico-responder',
+      () => selecionarResposta(item)
+    )
+  );
+
+  // Botão excluir: apenas mensagens próprias
+  if (propria) {
+    const excluir = criarBotaoAcao(
+      'Excluir',
+      'ico-lixeira',
+      () => excluirMensagem(item, excluir),
+      'excluir'
+    );
+
+    excluir.disabled = excluindo.has(item.id);
+
+    acoes.appendChild(excluir);
+  }
+
+  bolha.appendChild(acoes);
   linha.appendChild(bolha);
 
   return linha;
 }
+
 
 /* =========================================================
    EXIBIR MENSAGENS
@@ -176,71 +469,80 @@ function renderizar() {
     .trim()
     .toLocaleLowerCase('pt-BR');
 
-  const filtradas = mensagensAtuais.filter((item) =>
-    String(item.texto || '')
-      .toLocaleLowerCase('pt-BR')
-      .includes(busca)
+  const visiveis = mensagensAtuais.filter(
+    (item) =>
+      String(item.texto || '')
+        .toLocaleLowerCase('pt-BR')
+        .includes(busca)
   );
 
-  if (!filtradas.length) {
+  if (!visiveis.length) {
     const vazio = document.createElement('div');
 
     vazio.className = 'chat-vazio';
 
     const icone = document.createElement('div');
+
     icone.className = 'vazio-ilustracao';
     icone.textContent = '💬';
 
     const titulo = document.createElement('h3');
 
     titulo.textContent = busca
-      ? 'Nenhuma mensagem encontrada'
+      ? 'Nenhum resultado'
       : 'Comece a conversa';
 
     const descricao = document.createElement('p');
 
     descricao.textContent = busca
-      ? 'Tente buscar por outra palavra.'
-      : 'Suas mensagens ficam sincronizadas em tempo real com as contas autorizadas.';
+      ? 'Tente outra palavra. A busca considera as últimas 100 mensagens.'
+      : 'Compartilhe decisões, ideias e pendências do e-commerce com sua líder.';
 
-    vazio.append(icone, titulo, descricao);
+    vazio.append(
+      icone,
+      titulo,
+      descricao
+    );
 
     area.appendChild(vazio);
-    return;
+
+  } else {
+    visiveis.forEach((item) => {
+      area.appendChild(
+        criarMensagemVisual(item)
+      );
+    });
+
+    if (!busca) {
+      area.scrollTop = area.scrollHeight;
+    }
   }
 
-  filtradas.forEach((item) => {
-    area.appendChild(mensagemVisual(item));
-  });
-
-  if (!busca) {
-    area.scrollTop = area.scrollHeight;
-  }
+  atualizarBarraResposta();
 }
 
+
 /* =========================================================
-   FIRESTORE — MENSAGENS EM TEMPO REAL
+   FIRESTORE — CONVERSA EM TEMPO REAL
    ========================================================= */
 
-function acompanharSala() {
+function acompanharChat() {
   pararEscuta();
   renderizar();
 
-  if (!usuarioAtual || !SALAS.has(salaAtual)) return;
+  if (!usuarioAtual) return;
 
-  status('Conectando ao chat…');
+  definirStatus('Conectando ao chat…');
 
   const referencia = collection(
     db,
-    'salas',
-    salaAtual,
-    'mensagens'
+    ...CAMINHO
   );
 
   const consulta = query(
     referencia,
     orderBy('criadoEm', 'desc'),
-    limit(MAX_MENSAGENS)
+    limit(LIMITE_HISTORICO)
   );
 
   cancelarEscuta = onSnapshot(
@@ -248,9 +550,9 @@ function acompanharSala() {
 
     (snapshot) => {
       mensagensAtuais = snapshot.docs
-        .map((doc) => ({
-          id: doc.id,
-          ...doc.data({
+        .map((documento) => ({
+          id: documento.id,
+          ...documento.data({
             serverTimestamps: 'estimate'
           })
         }))
@@ -258,70 +560,116 @@ function acompanharSala() {
 
       renderizar();
 
-      status('Conectado · tempo real', 'online');
+      definirStatus(
+        'Conectado · tempo real',
+        'online'
+      );
     },
 
     (erro) => {
-      console.error('Erro ao acompanhar mensagens:', erro);
+      console.error(
+        'Falha na sincronização Firestore:',
+        erro
+      );
 
       pararEscuta();
+      renderizar();
 
       if (erro.code === 'permission-denied') {
-        mostrarAcesso(
-          'Esta conta não tem permissão para ler o chat. ' +
-          'Cadastre o e-mail nas regras do Firestore e publique as regras.'
+        exibirLogin(
+          'Esta conta não tem permissão para acessar o chat. ' +
+          'Confira os e-mails autorizados e publique as regras novas do Firestore.'
         );
 
-        status('Acesso não autorizado', 'erro');
+        definirStatus(
+          'Acesso não autorizado',
+          'erro'
+        );
 
       } else {
-        status('Não foi possível sincronizar', 'erro');
+        definirStatus(
+          'Falha na conexão',
+          'erro'
+        );
 
-        toast(
-          'Falha na conexão com Firestore. ' +
-          'Confira o console do navegador.'
+        mostrarToast(
+          'Não foi possível sincronizar o chat. Confira o Console (F12).'
         );
       }
     }
   );
 }
 
+
 /* =========================================================
-   TROCAR DE CANAL
+   EXCLUIR UMA MENSAGEM
    ========================================================= */
 
-function mudarSala(botao) {
-  const nova = botao.dataset.room;
+async function excluirMensagem(item, botao) {
 
-  if (!SALAS.has(nova)) return;
-
-  salaAtual = nova;
-
-  document.querySelectorAll('[data-room]').forEach((item) => {
-    item.classList.toggle(
-      'ativa',
-      item === botao
+  // Não permite excluir mensagem de outra pessoa.
+  if (
+    !usuarioAtual ||
+    item.autorUid !== usuarioAtual.uid
+  ) {
+    mostrarToast(
+      'Você só pode excluir mensagens enviadas por você.'
     );
 
-    item.setAttribute(
-      'aria-pressed',
-      String(item === botao)
+    return;
+  }
+
+  if (excluindo.has(item.id)) return;
+
+  const confirmado = window.confirm(
+    'Excluir esta mensagem para as duas pessoas?\n\n' +
+    'Ela será removida do Firestore e não poderá ser recuperada pelo chat.'
+  );
+
+  if (!confirmado) return;
+
+  excluindo.add(item.id);
+
+  botao.disabled = true;
+
+  try {
+    await deleteDoc(
+      doc(
+        db,
+        ...CAMINHO,
+        item.id
+      )
     );
-  });
 
-  $('roomTitle').textContent = botao.dataset.title;
+    if (mensagemRespondida?.id === item.id) {
+      cancelarResposta();
+    }
 
-  $('roomDescription').textContent =
-    botao.dataset.description;
+    mostrarToast(
+      'Mensagem excluída para as duas pessoas.'
+    );
 
-  $('messageSearch').value = '';
+  } catch (erro) {
+    console.error(
+      'Erro ao excluir mensagem:',
+      erro
+    );
 
-  fecharPicker();
-  acompanharSala();
+    mostrarToast(
+      erro.code === 'permission-denied'
+        ? 'Exclusão não autorizada. Publique as novas regras do Firestore.'
+        : 'Não foi possível excluir esta mensagem.'
+    );
+
+  } finally {
+    excluindo.delete(item.id);
+    botao.disabled = false;
+  }
 }
 
+
 /* =========================================================
-   ALTURA AUTOMÁTICA DO CAMPO
+   ALTURA AUTOMÁTICA DO CAMPO DE TEXTO
    ========================================================= */
 
 function atualizarAltura() {
@@ -333,35 +681,45 @@ function atualizarAltura() {
     Math.min(campo.scrollHeight, 145) + 'px';
 }
 
+
 /* =========================================================
-   ENVIAR MENSAGEM PARA O FIRESTORE
+   ENVIAR MENSAGENS E RESPOSTAS
    ========================================================= */
 
-async function enviarMensagem(texto, figurinha = false) {
-  const mensagem = texto.trim();
+async function enviarMensagem(
+  valor,
+  figurinha = false
+) {
+  const mensagem = String(valor || '').trim();
 
   if (!usuarioAtual) {
-    return toast(
+    mostrarToast(
       'Entre com sua conta Google para enviar mensagens.'
     );
+
+    return;
   }
 
   if (!mensagem || enviando) return;
 
   if (mensagem.length > 4000) {
-    return toast(
+    mostrarToast(
       'A mensagem deve ter até 4.000 caracteres.'
     );
+
+    return;
   }
 
   enviando = true;
+
   $('sendButton').disabled = true;
 
-  const salaDeEnvio = salaAtual;
+  const idRespondido =
+    mensagemRespondida?.id || '';
 
   try {
     await addDoc(
-      collection(db, 'salas', salaDeEnvio, 'mensagens'),
+      collection(db, ...CAMINHO),
       {
         texto: mensagem,
         autorUid: usuarioAtual.uid,
@@ -370,7 +728,12 @@ async function enviarMensagem(texto, figurinha = false) {
           usuarioAtual.email ||
           'Colaborador'
         ).slice(0, 100),
+
         figurinha: Boolean(figurinha),
+
+        // Referência à mensagem que está sendo respondida
+        respondeA: idRespondido,
+
         criadoEm: serverTimestamp()
       }
     );
@@ -383,16 +746,23 @@ async function enviarMensagem(texto, figurinha = false) {
       atualizarAltura();
     }
 
+    cancelarResposta();
     fecharPicker();
-    $('messageInput').focus();
+
+    $('messageInput').focus({
+      preventScroll: true
+    });
 
   } catch (erro) {
-    console.error('Erro ao enviar mensagem:', erro);
+    console.error(
+      'Erro ao enviar:',
+      erro
+    );
 
-    toast(
+    mostrarToast(
       erro.code === 'permission-denied'
-        ? 'Sem permissão para enviar. Confira os dois e-mails autorizados nas regras do Firestore.'
-        : 'Não foi possível enviar. Confira sua conexão.'
+        ? 'Sem permissão para enviar. Atualize as regras do Firestore.'
+        : 'Falha ao enviar mensagem. Confira a conexão.'
     );
 
   } finally {
@@ -400,6 +770,7 @@ async function enviarMensagem(texto, figurinha = false) {
     $('sendButton').disabled = false;
   }
 }
+
 
 /* =========================================================
    EMOJIS
@@ -414,17 +785,18 @@ function fecharPicker() {
   );
 }
 
+
 /* =========================================================
-   LOGIN COM GOOGLE
+   TRATAMENTO DOS ERROS DE LOGIN
    ========================================================= */
 
-function erroLogin(erro) {
+function mensagemErroLogin(erro) {
   if (erro.code === 'auth/popup-closed-by-user') {
     return 'A janela de login foi fechada.';
   }
 
   if (erro.code === 'auth/unauthorized-domain') {
-    return 'Adicione este domínio em Firebase → Authentication → Settings → Authorized domains.';
+    return 'Autorize o domínio em Firebase Authentication → Authorized domains.';
   }
 
   if (erro.code === 'auth/operation-not-allowed') {
@@ -432,45 +804,87 @@ function erroLogin(erro) {
   }
 
   if (erro.code === 'auth/popup-blocked') {
-    return 'Permita pop-ups no navegador para entrar com o Google.';
+    return 'Permita pop-ups neste navegador.';
   }
 
   return erro.message ||
     'Não foi possível entrar com o Google.';
 }
 
-$('loginGoogle').addEventListener('click', async () => {
-  $('loginGoogle').disabled = true;
-
-  try {
-    await signInWithPopup(
-      auth,
-      googleProvider
-    );
-
-  } catch (erro) {
-    console.error('Erro de login:', erro);
-    toast(erroLogin(erro));
-
-  } finally {
-    $('loginGoogle').disabled = false;
-  }
-});
 
 /* =========================================================
-   SAIR DA CONTA GOOGLE
+   ENTRAR COM GOOGLE
    ========================================================= */
 
-$('logoutGoogle').addEventListener('click', async () => {
-  try {
-    await signOut(auth);
-  } catch (erro) {
-    toast(erro.message || 'Não foi possível sair.');
+$('loginGoogle').addEventListener(
+  'click',
+  async () => {
+    const botao = $('loginGoogle');
+
+    botao.disabled = true;
+    botao.textContent = 'Abrindo Google...';
+
+    $('authInfo').textContent =
+      'Abrindo o login Google. Se não aparecer, permita pop-ups.';
+
+    definirStatus('Solicitando login…');
+
+    try {
+      await signInWithPopup(
+        auth,
+        googleProvider
+      );
+
+    } catch (erro) {
+      console.error(
+        'Erro de login:',
+        erro
+      );
+
+      const descricao =
+        mensagemErroLogin(erro);
+
+      $('authInfo').textContent = descricao;
+
+      definirStatus(
+        'Falha no login',
+        'erro'
+      );
+
+      mostrarToast(descricao);
+
+    } finally {
+      botao.disabled = false;
+
+      botao.textContent =
+        'Entrar com Google';
+    }
   }
-});
+);
+
 
 /* =========================================================
-   IDENTIFICAR USUÁRIO CONECTADO
+   SAIR DA CONTA
+   ========================================================= */
+
+$('logoutGoogle').addEventListener(
+  'click',
+  async () => {
+    try {
+      await signOut(auth);
+
+    } catch (erro) {
+      mostrarToast(
+        erro.message ||
+        'Não foi possível sair.'
+      );
+    }
+  }
+);
+
+
+/* =========================================================
+   IDENTIFICAR O USUÁRIO
    ========================================================= */
 
 onAuthStateChanged(
@@ -481,14 +895,17 @@ onAuthStateChanged(
 
     usuarioAtual = usuario;
 
+    cancelarResposta();
+
     if (!usuario) {
       $('authUser').textContent = '';
+
       $('logoutGoogle').hidden = true;
 
-      status('Aguardando acesso');
+      definirStatus('Aguardando acesso');
 
-      mostrarAcesso(
-        'Entre com uma das duas contas Google autorizadas para conversar.'
+      exibirLogin(
+        'Entre com uma das duas contas Google autorizadas da B.live.'
       );
 
       return;
@@ -501,58 +918,77 @@ onAuthStateChanged(
 
     $('logoutGoogle').hidden = false;
 
-    mostrarChat();
-    acompanharSala();
+    exibirChat();
+    acompanharChat();
   },
 
   (erro) => {
-    console.error('Erro de autenticação:', erro);
-
-    mostrarAcesso(
-      'Não foi possível verificar o login. Atualize a página.'
+    console.error(
+      'Erro de autenticação:',
+      erro
     );
 
-    status('Erro de autenticação', 'erro');
+    exibirLogin(
+      'Não foi possível verificar seu login. Atualize a página.'
+    );
+
+    definirStatus(
+      'Erro de autenticação',
+      'erro'
+    );
   }
 );
+
 
 /* =========================================================
    EVENTOS DA INTERFACE
    ========================================================= */
 
-// Trocar canais
-document.querySelectorAll('[data-room]').forEach((botao) => {
-  botao.addEventListener('click', () => {
-    mudarSala(botao);
-  });
-});
-
-// Enviar pelo botão
-$('composer').addEventListener('submit', (evento) => {
-  evento.preventDefault();
-
-  enviarMensagem(
-    $('messageInput').value
-  );
-});
-
-// Enviar com Enter
-$('messageInput').addEventListener('keydown', (evento) => {
-  if (
-    evento.key === 'Enter' &&
-    !evento.shiftKey &&
-    !evento.isComposing
-  ) {
+// Envio pelo botão
+$('composer').addEventListener(
+  'submit',
+  (evento) => {
     evento.preventDefault();
-    $('composer').requestSubmit();
-  }
-});
 
-// Ajustar altura
+    enviarMensagem(
+      $('messageInput').value
+    );
+  }
+);
+
+
+// Envio com Enter
+$('messageInput').addEventListener(
+  'keydown',
+  (evento) => {
+
+    if (
+      evento.key === 'Enter' &&
+      !evento.shiftKey &&
+      !evento.isComposing
+    ) {
+      evento.preventDefault();
+
+      $('composer').requestSubmit();
+    }
+
+    // Escape cancela uma resposta em andamento.
+    if (
+      evento.key === 'Escape' &&
+      mensagemRespondida
+    ) {
+      cancelarResposta();
+    }
+  }
+);
+
+
+// Ajustar altura do textarea
 $('messageInput').addEventListener(
   'input',
   atualizarAltura
 );
+
 
 // Buscar mensagens
 $('messageSearch').addEventListener(
@@ -560,16 +996,28 @@ $('messageSearch').addEventListener(
   renderizar
 );
 
-// Abrir emojis
-$('emojiButton').addEventListener('click', () => {
-  const fechado = $('picker')
-    .classList.toggle('escondido');
 
-  $('emojiButton').setAttribute(
-    'aria-expanded',
-    String(!fechado)
-  );
-});
+// Cancelar resposta
+$('cancelReply').addEventListener(
+  'click',
+  cancelarResposta
+);
+
+
+// Mostrar emojis
+$('emojiButton').addEventListener(
+  'click',
+  () => {
+    const fechado = $('picker')
+      .classList.toggle('escondido');
+
+    $('emojiButton').setAttribute(
+      'aria-expanded',
+      String(!fechado)
+    );
+  }
+);
+
 
 // Fechar emojis
 $('closePicker').addEventListener(
@@ -577,47 +1025,64 @@ $('closePicker').addEventListener(
   fecharPicker
 );
 
-// Inserir emoji na mensagem
-document.querySelectorAll('[data-emoji]').forEach((botao) => {
-  botao.addEventListener('click', () => {
-    const campo = $('messageInput');
 
-    const inicio = campo.selectionStart;
-    const fim = campo.selectionEnd;
+// Inserir emojis no campo
+document
+  .querySelectorAll('[data-emoji]')
+  .forEach((botao) => {
 
-    campo.setRangeText(
-      botao.dataset.emoji,
-      inicio,
-      fim,
-      'end'
-    );
+    botao.addEventListener('click', () => {
+      const campo = $('messageInput');
 
-    campo.focus();
-    atualizarAltura();
+      campo.setRangeText(
+        botao.dataset.emoji,
+        campo.selectionStart,
+        campo.selectionEnd,
+        'end'
+      );
+
+      campo.focus();
+      atualizarAltura();
+    });
+
   });
-});
 
-// Enviar figurinha de emoji
-document.querySelectorAll('[data-sticker]').forEach((botao) => {
-  botao.addEventListener('click', () => {
-    enviarMensagem(
-      botao.dataset.sticker,
-      true
-    );
+
+// Enviar figurinhas
+document
+  .querySelectorAll('[data-sticker]')
+  .forEach((botao) => {
+
+    botao.addEventListener('click', () => {
+      enviarMensagem(
+        botao.dataset.sticker,
+        true
+      );
+    });
+
   });
-});
 
-// Anexos serão integrados ao Firebase Storage
-$('attachButton').addEventListener('click', () => {
-  toast(
-    'Anexos exigem Firebase Storage. ' +
-    'Nesta etapa, o chat envia textos e emojis em tempo real.'
-  );
-});
 
-// Exclusão desabilitada para preservar conversas
-$('clearRoom').hidden = true;
+// Anexos: ainda não implementados
+$('attachButton').addEventListener(
+  'click',
+  () => {
+    mostrarToast(
+      'Fotos e documentos ainda precisam do Firebase Storage.'
+    );
+  }
+);
 
-// Estado inicial
-status('Verificando login…');
-mostrarAcesso('Verificando sua conta Google…');
+
+/* =========================================================
+   FINALIZAÇÃO
+   ========================================================= */
+
+// Confirma ao HTML que o módulo carregou.
+window.__bliveChatReady = true;
+
+definirStatus('Verificando login…');
+
+exibirLogin(
+  'Verificando sua conta Google…'
+);

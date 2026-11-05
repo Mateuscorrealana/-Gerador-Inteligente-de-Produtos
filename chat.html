@@ -1,20 +1,32 @@
 
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#23172b">
-  <meta name="description" content="Espaço interno da B.live in Pets para conversas sobre e-commerce.">
+
+  <meta
+    name="description"
+    content="Espaço interno da B.live in Pets para conversas sobre e-commerce."
+  >
+
   <title>Chat E-commerce | B.live Intelligence</title>
+
   <link rel="icon" type="image/jpeg" href="/logo/images.jpg">
-  <link rel="stylesheet" href="/css-principal/index.css">
   <link rel="stylesheet" href="/css-principal/chat.css">
 </head>
 
 <body>
-  <!-- Ícones SVG reutilizáveis -->
-  <svg class="svg-sprite" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+
+  <!-- ÍCONES DO SISTEMA -->
+  <svg
+    class="svg-sprite"
+    xmlns="http://www.w3.org/2000/svg"
+    aria-hidden="true"
+  >
+
     <symbol id="ico-painel" viewBox="0 0 24 24">
       <rect x="3" y="3" width="7" height="7" rx="1.5"/>
       <rect x="14" y="3" width="7" height="7" rx="1.5"/>
@@ -75,6 +87,12 @@
     <symbol id="ico-check" viewBox="0 0 24 24">
       <path d="m5 12 4 4L19 6"/>
     </symbol>
+
+    <symbol id="ico-responder" viewBox="0 0 24 24">
+      <path d="m9 10-5 5 5 5"/>
+      <path d="M20 5v5a5 5 0 0 1-5 5H4"/>
+    </symbol>
+
   </svg>
 
   <div class="app-shell">
@@ -82,7 +100,8 @@
     <!-- MENU LATERAL -->
     <aside class="sidebar" aria-label="Menu principal">
 
-      <a class="marca" href="/index.html#inicio">
+      <a class="marca" href="./index.html#inicio">
+
         <span class="marca-logo">
           <img
             src="/logo/images.jpg"
@@ -90,39 +109,58 @@
             onerror="this.style.display='none';this.parentElement.textContent='B.'"
           >
         </span>
+
         <span class="marca-texto">
           <strong>B.live <span>Intelligence</span></strong>
           <small>OTIMIZAÇÃO DE CADASTROS</small>
         </span>
+
       </a>
 
       <div class="sidebar-grupo">
-        <p class="sidebar-titulo">ESPAÇO DE TRABALHO</p>
+
+        <p class="sidebar-titulo">
+          ESPAÇO DE TRABALHO
+        </p>
 
         <nav class="menu" aria-label="Seções">
 
-          <a class="menu-link" href="/index.html#inicio">
-            <svg class="ico"><use href="#ico-painel"/></svg>
+          <a class="menu-link" href="./index.html#inicio">
+            <svg class="ico">
+              <use href="#ico-painel"/>
+            </svg>
             <span>Painel inicial</span>
           </a>
 
-          <a class="menu-link ativo" href="/chat.html" aria-current="page">
-            <svg class="ico"><use href="#ico-chat"/></svg>
+          <a
+            class="menu-link ativo"
+            href="./chat.html"
+            aria-current="page"
+          >
+            <svg class="ico">
+              <use href="#ico-chat"/>
+            </svg>
             <span>Chat</span>
           </a>
 
-          <a class="menu-link" href="/index.html#entrada">
-            <svg class="ico"><use href="#ico-plus"/></svg>
+          <a class="menu-link" href="./index.html#entrada">
+            <svg class="ico">
+              <use href="#ico-plus"/>
+            </svg>
             <span>Novo cadastro</span>
           </a>
 
-          <a class="menu-link" href="/index.html#resultados">
-            <svg class="ico"><use href="#ico-editor"/></svg>
+          <a class="menu-link" href="./index.html#resultados">
+            <svg class="ico">
+              <use href="#ico-editor"/>
+            </svg>
             <span>Editor de conteúdo</span>
           </a>
 
-          <a class="menu-link" href="/index.html#biblioteca">
-            <svg class="ico"><use href="#ico-pasta"/></svg>
+          <a class="menu-link" href="./index.html#biblioteca">
+            <svg class="ico">
+              <use href="#ico-pasta"/>
+            </svg>
             <span>Biblioteca</span>
           </a>
 
@@ -130,78 +168,133 @@
       </div>
 
       <div class="sidebar-rodape">
+
         <span class="sidebar-ponto"></span>
+
         <div>
           <strong>Ambiente interno</strong>
           <small>B.live in Pets</small>
         </div>
+
       </div>
+
     </aside>
 
     <div class="app-corpo">
 
-      <!-- BARRA SUPERIOR -->
+      <!-- HEADER -->
       <header class="topbar">
 
         <div class="topbar-identidade">
+
           <span class="topbar-icon">
-            <svg class="ico"><use href="#ico-chat"/></svg>
+            <svg class="ico">
+              <use href="#ico-chat"/>
+            </svg>
           </span>
 
           <div>
             <strong>Chat E-commerce</strong>
             <small>Comunicação e alinhamento da equipe</small>
           </div>
+
         </div>
 
         <div class="topbar-conta">
-          <span id="authUser" class="auth-usuario"></span>
 
-          <button id="logoutGoogle" class="btn-sair" type="button" hidden>
+          <span
+            class="auth-usuario"
+            id="authUser"
+          ></span>
+
+          <button
+            class="btn-sair"
+            id="logoutGoogle"
+            type="button"
+            hidden
+          >
             Sair
           </button>
 
-          <a class="voltar" href="/index.html#inicio">
-            <svg class="ico"><use href="#ico-seta"/></svg>
+          <a class="voltar" href="./index.html#inicio">
+            <svg class="ico">
+              <use href="#ico-seta"/>
+            </svg>
             <span>Voltar ao gerador</span>
           </a>
+
         </div>
+
       </header>
 
       <main class="conteudo">
 
-        <!-- TÍTULO DA PÁGINA -->
+        <!-- APRESENTAÇÃO -->
         <div class="page-heading">
+
           <div>
-            <p class="eyebrow">B.LIVE INTELLIGENCE / COMUNICAÇÃO</p>
-            <h1>Nosso espaço de <span>conversas.</span></h1>
-            <p>Organize ideias, decisões e pendências do e-commerce em um só lugar.</p>
+
+            <p class="eyebrow">
+              B.LIVE INTELLIGENCE / COMUNICAÇÃO
+            </p>
+
+            <h1>
+              Chat <span>interno B.live.</span>
+            </h1>
+
+            <p>
+              Uma conversa para tudo: produtos, marketplaces,
+              campanhas e decisões do e-commerce.
+            </p>
+
           </div>
 
-          <span class="status-demo" id="chatStatus" role="status">
+          <span
+            class="status-demo"
+            id="chatStatus"
+            role="status"
+          >
             <span class="status-dot"></span>
-            <span class="status-text">Verificando login…</span>
+            <span class="status-text">
+              Verificando login…
+            </span>
           </span>
+
         </div>
 
-        <!-- TELA DE LOGIN GOOGLE -->
-        <section class="auth-panel" id="authPanel" aria-label="Acesso ao chat">
-          <div class="auth-icone" aria-hidden="true">🔒</div>
+        <!-- LOGIN -->
+        <section
+          class="auth-panel"
+          id="authPanel"
+          aria-label="Acesso ao chat"
+        >
+
+          <div class="auth-icone" aria-hidden="true">
+            🔒
+          </div>
 
           <h2>Acesso ao Chat B.live</h2>
 
-          <p id="authInfo">Verificando sua conta Google…</p>
+          <p id="authInfo">
+            Verificando sua conta Google…
+          </p>
 
-          <button type="button" id="loginGoogle" class="btn-google">
+          <button
+            class="btn-google"
+            id="loginGoogle"
+            type="button"
+          >
             Entrar com Google
           </button>
 
           <small>
-            Somente as duas contas autorizadas nas regras do Firestore podem conversar.
+            Somente as duas contas autorizadas nas regras
+            do Firestore podem conversar.
           </small>
+
         </section>
 
-        <!-- ÁREA DO CHAT -->
+        <!-- CHAT ÚNICO -->
         <section
           class="chat-app"
           id="chatApp"
@@ -209,174 +302,88 @@
           hidden
         >
 
-          <!-- CANAIS DE CONVERSA -->
-          <aside class="conversas" aria-label="Assuntos do chat">
-
-            <div class="conversas-header">
-              <span class="subtitulo">CANAIS DE CONVERSA</span>
-              <strong>Assuntos do e-commerce</strong>
-              <p>Separe as mensagens por tema.</p>
-            </div>
-
-            <div class="salas" id="roomList">
-
-              <button
-                class="sala ativa"
-                type="button"
-                data-room="geral"
-                data-title="Geral do E-commerce"
-                data-description="Decisões e alinhamentos da equipe"
-                aria-pressed="true"
-              >
-                <span class="sala-icone">💬</span>
-                <span class="sala-texto">
-                  <strong>Geral do E-commerce</strong>
-                  <small>Assuntos do dia a dia</small>
-                </span>
-              </button>
-
-              <button
-                class="sala"
-                type="button"
-                data-room="produtos"
-                data-title="Produtos e Cadastros"
-                data-description="SEO, GEO, fotos e descrições"
-                aria-pressed="false"
-              >
-                <span class="sala-icone">🏷️</span>
-                <span class="sala-texto">
-                  <strong>Produtos e Cadastros</strong>
-                  <small>SEO, GEO e imagens</small>
-                </span>
-              </button>
-
-              <button
-                class="sala"
-                type="button"
-                data-room="marketplaces"
-                data-title="Marketplaces"
-                data-description="Shopee, Mercado Livre e TikTok Shop"
-                aria-pressed="false"
-              >
-                <span class="sala-icone">🛍️</span>
-                <span class="sala-texto">
-                  <strong>Marketplaces</strong>
-                  <small>Shopee, ML e TikTok</small>
-                </span>
-              </button>
-
-              <button
-                class="sala"
-                type="button"
-                data-room="campanhas"
-                data-title="Campanhas e Promoções"
-                data-description="Criativos, ofertas e lançamentos"
-                aria-pressed="false"
-              >
-                <span class="sala-icone">📣</span>
-                <span class="sala-texto">
-                  <strong>Campanhas</strong>
-                  <small>Ofertas e lançamentos</small>
-                </span>
-              </button>
-
-              <button
-                class="sala"
-                type="button"
-                data-room="pendencias"
-                data-title="Pendências"
-                data-description="O que precisamos resolver"
-                aria-pressed="false"
-              >
-                <span class="sala-icone">✅</span>
-                <span class="sala-texto">
-                  <strong>Pendências</strong>
-                  <small>Acompanhar tarefas</small>
-                </span>
-              </button>
-
-            </div>
-
-            <div class="conversas-aviso">
-              <svg class="ico"><use href="#ico-check"/></svg>
-              <span>
-                Mensagens sincronizadas pelo Firestore, com acesso limitado
-                às contas autorizadas.
-              </span>
-            </div>
-          </aside>
-
-          <!-- CONVERSA PRINCIPAL -->
           <div class="chat-principal">
 
+            <!-- CABEÇALHO DA CONVERSA -->
             <div class="conversa-topo">
 
               <div class="conversa-info">
-                <div class="avatar-grupo" aria-hidden="true">💜</div>
+
+                <div class="avatar-grupo" aria-hidden="true">
+                  💜
+                </div>
 
                 <div>
-                  <h2 id="roomTitle">Geral do E-commerce</h2>
-                  <p id="roomDescription">Decisões e alinhamentos da equipe</p>
+                  <h2 id="roomTitle">
+                    Chat Geral da B.live
+                  </h2>
+
+                  <p id="roomDescription">
+                    Conversa compartilhada entre você e sua líder
+                  </p>
                 </div>
+
               </div>
 
               <div class="conversa-acoes">
 
                 <label class="busca">
-                  <svg class="ico"><use href="#ico-busca"/></svg>
+
+                  <svg class="ico">
+                    <use href="#ico-busca"/>
+                  </svg>
 
                   <input
                     type="search"
                     id="messageSearch"
-                    placeholder="Buscar mensagem"
-                    aria-label="Buscar mensagens nesta conversa"
+                    placeholder="Buscar nas últimas 100 mensagens"
+                    aria-label="Buscar nas últimas 100 mensagens"
                   >
+
                 </label>
 
-                <button
-                  type="button"
-                  class="icone-botao limpar-chat"
-                  id="clearRoom"
-                  title="Exclusão desabilitada neste chat"
-                  aria-label="Exclusão de mensagens desabilitada"
-                >
-                  <svg class="ico"><use href="#ico-lixeira"/></svg>
-                </button>
-
               </div>
+
             </div>
 
-            <!-- LISTA DE MENSAGENS -->
+            <!-- MENSAGENS -->
             <div
               class="mensagens"
               id="messages"
               role="log"
-              aria-label="Mensagens do assunto"
+              aria-label="Mensagens do Chat Geral da B.live"
               aria-live="polite"
             >
 
               <div class="chat-vazio" id="emptyState">
-                <div class="vazio-ilustracao">💬</div>
+
+                <div class="vazio-ilustracao">
+                  💬
+                </div>
+
                 <h3>Comece a conversa</h3>
+
                 <p>
-                  As mensagens deste assunto são compartilhadas em tempo
-                  real com a equipe autorizada.
+                  Envie uma mensagem para começar.
+                  Ela será compartilhada em tempo real
+                  com as contas autorizadas.
                 </p>
+
               </div>
 
             </div>
 
-            <!-- CAMPO DE ENVIO -->
+            <!-- ENVIO DE MENSAGENS -->
             <div class="composer-area">
 
               <div class="aviso-local">
-                <span aria-hidden="true">ℹ</span>
-                Mensagens e emojis sincronizados ao vivo.
-                Fotos, vídeos e documentos serão ativados em uma próxima etapa
-                com o Firebase Storage.
+                Conversa em tempo real. Responda uma mensagem
+                pelo ícone de seta e exclua suas mensagens
+                pela lixeira. Anexos serão habilitados
+                com Firebase Storage.
               </div>
 
-              <!-- EMOJIS -->
+              <!-- PAINEL DE EMOJIS -->
               <div
                 class="picker escondido"
                 id="picker"
@@ -384,19 +391,24 @@
               >
 
                 <div class="picker-topo">
+
                   <strong>Emojis e figurinhas</strong>
 
                   <button
-                    type="button"
                     class="icone-botao"
                     id="closePicker"
+                    type="button"
                     aria-label="Fechar"
                   >
-                    <svg class="ico"><use href="#ico-fechar"/></svg>
+                    <svg class="ico">
+                      <use href="#ico-fechar"/>
+                    </svg>
                   </button>
+
                 </div>
 
                 <div class="picker-itens" id="pickerItems">
+
                   <button type="button" data-emoji="💜">💜</button>
                   <button type="button" data-emoji="😊">😊</button>
                   <button type="button" data-emoji="🐶">🐶</button>
@@ -409,11 +421,15 @@
                   <button type="button" data-emoji="📦">📦</button>
                   <button type="button" data-emoji="⭐">⭐</button>
                   <button type="button" data-emoji="🥰">🥰</button>
+
                 </div>
 
-                <p class="picker-subheading">FIGURINHAS RÁPIDAS</p>
+                <p class="picker-subheading">
+                  FIGURINHAS RÁPIDAS
+                </p>
 
                 <div class="picker-stickers">
+
                   <button
                     type="button"
                     data-sticker="💜"
@@ -437,37 +453,89 @@
                     data-sticker="✅"
                     aria-label="Enviar figurinha de concluído"
                   >✅</button>
+
                 </div>
 
                 <div class="picker-legenda">
-                  Emojis entram na mensagem; figurinhas são enviadas separadamente.
+                  Emojis entram na mensagem;
+                  figurinhas são enviadas separadamente.
                 </div>
+
+              </div>
+
+              <!-- PRÉVIA DA MENSAGEM RESPONDIDA -->
+              <div
+                class="reply-preview"
+                id="replyPreview"
+                role="region"
+                aria-label="Respondendo a uma mensagem"
+                hidden
+              >
+
+                <div
+                  class="reply-preview-bar"
+                  aria-hidden="true"
+                ></div>
+
+                <div class="reply-preview-text">
+
+                  <strong id="replyAuthor">
+                    Respondendo
+                  </strong>
+
+                  <span id="replyText"></span>
+
+                </div>
+
+                <button
+                  class="icone-botao reply-cancel"
+                  id="cancelReply"
+                  type="button"
+                  title="Cancelar resposta"
+                  aria-label="Cancelar resposta"
+                >
+                  <svg class="ico">
+                    <use href="#ico-fechar"/>
+                  </svg>
+                </button>
+
               </div>
 
               <!-- FORMULÁRIO -->
-              <form id="composer" class="composer" autocomplete="off">
+              <form
+                class="composer"
+                id="composer"
+                autocomplete="off"
+              >
 
                 <button
-                  type="button"
                   class="icone-botao"
                   id="attachButton"
+                  type="button"
                   aria-label="Anexar arquivo"
                   title="Anexos disponíveis após configurar o Firebase Storage"
                 >
-                  <svg class="ico"><use href="#ico-clip"/></svg>
+                  <svg class="ico">
+                    <use href="#ico-clip"/>
+                  </svg>
                 </button>
 
                 <button
-                  type="button"
                   class="icone-botao"
                   id="emojiButton"
+                  type="button"
                   aria-label="Emojis e figurinhas"
                   aria-expanded="false"
                 >
-                  <svg class="ico"><use href="#ico-emoji"/></svg>
+                  <svg class="ico">
+                    <use href="#ico-emoji"/>
+                  </svg>
                 </button>
 
-                <label for="messageInput" class="visually-hidden">
+                <label
+                  class="visually-hidden"
+                  for="messageInput"
+                >
                   Sua mensagem
                 </label>
 
@@ -479,22 +547,27 @@
                 ></textarea>
 
                 <button
-                  type="submit"
                   class="enviar"
                   id="sendButton"
+                  type="submit"
                   aria-label="Enviar mensagem"
                 >
-                  <svg class="ico"><use href="#ico-enviar"/></svg>
+                  <svg class="ico">
+                    <use href="#ico-enviar"/>
+                  </svg>
                 </button>
 
               </form>
 
               <p class="dica-composer">
-                Enter para enviar · Shift + Enter para quebrar a linha
+                Enter envia · Shift + Enter quebra a linha ·
+                Excluir somente suas mensagens
               </p>
 
             </div>
+
           </div>
+
         </section>
 
         <footer class="rodape">
@@ -503,9 +576,12 @@
         </footer>
 
       </main>
+
     </div>
+
   </div>
 
+  <!-- NOTIFICAÇÕES -->
   <div
     class="toast"
     id="chatToast"
@@ -513,8 +589,48 @@
     aria-live="polite"
   ></div>
 
-  <!-- Integração Firebase -->
-  <script type="module" src="./js/chat.js"></script>
+  <!-- DIAGNÓSTICO DE CARREGAMENTO -->
+  <script>
+    window.__bliveChatReady = false;
+
+    const botaoLoginBlive =
+      document.getElementById('loginGoogle');
+
+    const statusLoginBlive =
+      document.getElementById('authInfo');
+
+    if (location.protocol === 'file:') {
+      statusLoginBlive.textContent =
+        'Esta página foi aberta como arquivo local (file://). ' +
+        'Abra com um servidor HTTP, como Live Server ou Vercel.';
+    }
+
+    botaoLoginBlive.addEventListener('click', () => {
+      if (!window.__bliveChatReady) {
+        statusLoginBlive.textContent =
+          'O JavaScript do chat não foi carregado. ' +
+          'Verifique se js/chat.js e js/firebase-config.js ' +
+          'existem e abra F12 → Console para ver o erro.';
+      }
+    });
+
+    window.addEventListener('error', (evento) => {
+      if (
+        !window.__bliveChatReady &&
+        evento.target?.tagName === 'SCRIPT'
+      ) {
+        statusLoginBlive.textContent =
+          'Não foi possível carregar o script do chat. ' +
+          'Confira o caminho ./js/chat.js.';
+      }
+    }, true);
+  </script>
+
+  <!-- FIREBASE -->
+  <script
+    type="module"
+    src="./js/chat.js"
+  ></script>
 
 </body>
 </html>

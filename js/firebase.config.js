@@ -1,7 +1,7 @@
 
-// B.live Intelligence — Configuração Firebase.
-// A configuração Web é pública.
-// Nunca coloque chaves privadas de conta de serviço neste arquivo.
+// B.live Intelligence — Firebase
+// Esta configuração Web é pública.
+// Nunca coloque chaves privadas de conta de serviço aqui.
 
 import {
   initializeApp
@@ -26,16 +26,16 @@ const firebaseConfig = {
   measurementId: 'G-F6XVXQD70Q'
 };
 
-// Inicializar Firebase
+// Aplicativo
 const app = initializeApp(firebaseConfig);
 
-// Autenticação Google
+// Autenticação
 const auth = getAuth(app);
 
-// Banco de dados Firestore
+// Banco de dados
 const db = getFirestore(app);
 
-// Provedor de login
+// Login com Google
 const googleProvider = new GoogleAuthProvider();
 
 googleProvider.setCustomParameters({
