@@ -40,49 +40,14 @@
             </svg>
             <span>Chat</span>
           </a>
-          <a class="menu-link" href="#entrada">
-            <svg viewBox="0 0 24 24" aria-hidden="true">
-              <path d="M12 5v14M5 12h14" />
-              <circle cx="12" cy="12" r="9" />
-            </svg>
-            <span>Novo cadastro</span>
-          </a>
-          <a class="menu-link" href="#resultados">
-            <svg viewBox="0 0 24 24" aria-hidden="true">
-              <rect x="5" y="3" width="14" height="18" rx="2" />
-              <path d="M9 8h6M9 12h6M9 16h4" />
-            </svg>
-            <span>Editor de conteúdo</span>
-          </a>
-          <a class="menu-link" href="#biblioteca">
-            <svg viewBox="0 0 24 24" aria-hidden="true">
-              <path d="M3 7a2 2 0 0 1 2-2h5l2 2h7a2 2 0 0 1 2 2v10H3z" />
-              <path d="M3 10h18" />
-            </svg>
-            <span>Biblioteca</span>
-          </a>
-        </nav>
-      </div>
 
-      <div class="sidebar-rodape">
-        <span class="sidebar-ponto" aria-hidden="true"></span>
-        <div><strong>Ambiente interno</strong><small>B.live in Pets</small></div>
-      </div>
+          <div class="sidebar-rodape">
+            <span class="sidebar-ponto" aria-hidden="true"></span>
+            <div><strong>Ambiente interno</strong><small>B.live in Pets</small></div>
+          </div>
     </aside>
 
     <div class="app-corpo">
-      <!-- TOPO -->
-      <header class="topbar">
-        <div class="topbar-trilha"><span>ESPAÇO DE TRABALHO</span><span class="separador">/</span><strong>OTIMIZAÇÃO DE
-            CADASTROS</strong>
-        </div>
-        <button class="btn btn-topo" type="button" id="btnNovo">
-          <svg viewBox="0 0 24 24" aria-hidden="true">
-            <path d="M12 5v14M5 12h14" />
-          </svg>
-          Novo produto
-        </button>
-      </header>
 
       <main class="conteudo" id="inicio">
         <!-- APRESENTAÇÃO -->
@@ -91,28 +56,11 @@
             <h1 id="pagina-titulo">Seu catálogo, <span>mais inteligente.</span></h1>
             <p class="hero-descricao">Transforme informações reais dos produtos B.live em conteúdos prontos para revisar
               e publicar no site e nos marketplaces.</p>
-            <div class="hero-tags" aria-label="Recursos do gerador">
-              <span>SEO + GEO</span><span>9 campos de conteúdo</span><span>Site e marketplaces</span>
-            </div>
-          </div>
-          <div class="hero-grafico" aria-hidden="true">
-            <div class="hero-orbita orbita-a"></div>
-            <div class="hero-orbita orbita-b"></div>
-            <div class="hero-emblema">B<span>.</span></div>
-            <div class="hero-placa placa-a"><span>✦</span> Conteúdo inteligente</div>
-            <div class="hero-placa placa-b">SEO <span>●</span> GEO</div>
-          </div>
         </section>
 
         <!-- GERAÇÃO -->
         <section class="painel painel-entrada" id="entrada" aria-labelledby="entrada-titulo">
           <div class="painel-cabecalho">
-            <div class="cabecalho-icone" aria-hidden="true">
-              <svg viewBox="0 0 24 24">
-                <path
-                  d="m12 3 1.6 5.4L19 10l-5.4 1.6L12 17l-1.6-5.4L5 10l5.4-1.6zM19 17l.7 2.3L22 20l-2.3.7L19 23l-.7-2.3L16 20l2.3-.7z" />
-              </svg>
-            </div>
             <div class="painel-titulos">
               <p class="sobretitulo">COMECE POR AQUI</p>
               <h2 id="entrada-titulo">Gerar cadastro de produto</h2>
@@ -134,28 +82,8 @@
               B.live. Informações técnicas não confirmadas não devem ser inventadas.</p>
           </div>
 
-          <!-- O JavaScript atual já entende nome, SKU e info. -->
-          <details class="entrada-manual" id="entradaManual">
-            <summary>Produto novo ou sem URL <span>Preencher dados manualmente</span></summary>
-            <div class="manual-conteudo">
-              <div class="manual-grid">
-                <div><label class="campo-rotulo" for="nome">Nome do produto</label><input id="nome" type="text"
-                    placeholder="Ex.: Regata Pet Frufru Rosa"></div>
-                <div><label class="campo-rotulo" for="sku">Referência / SKU</label><input id="sku" type="text"
-                    placeholder="Ex.: 90341"></div>
-              </div>
-              <div><label class="campo-rotulo" for="info">Informações confirmadas</label><textarea id="info" rows="4"
-                  placeholder="Informe o tecido, composição, cores, tamanhos e outros detalhes confirmados."></textarea>
-              </div>
-            </div>
-          </details>
-
           <div class="entrada-acoes">
             <button type="button" id="btnAnalisar" class="btn btn-principal">
-              <svg viewBox="0 0 24 24" aria-hidden="true">
-                <path d="m12 3 1.7 5.3L19 10l-5.3 1.7L12 17l-1.7-5.3L5 10l5.3-1.7z" />
-                <path d="m19 17 .6 1.4L21 19l-1.4.6L19 21l-.6-1.4L17 19l1.4-.6z" />
-              </svg>
               ANALISAR E GERAR CADASTRO
             </button>
             <button type="button" id="btnLimparEntrada" class="btn btn-discreto">Limpar campos</button>
@@ -284,7 +212,7 @@
             sincronizados entre computadores.</p>
         </section>
 
-        <footer class="rodape"><span>© B.live in Pets</span><span>Product Studio · Ferramenta interna de conteúdo</span>
+        <footer class="rodape"><span>© B.live in Pets</span>
         </footer>
       </main>
     </div>

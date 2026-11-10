@@ -1389,3 +1389,62 @@ img { max-width: 100%; display: block; }
     animation-duration: .01ms !important;
   }
 }
+
+
+/* ==========================================
+   B.LIVE — BOTÕES SOMENTE COM ÍCONES
+   ========================================== */
+
+.acao-mensagem,
+.mensagem-linha.recebida .acao-mensagem {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 36px;
+  min-width: 36px;
+  height: 36px;
+  min-height: 36px;
+
+  padding: 0;
+  gap: 0;
+
+  border-radius: 9px;
+}
+
+.acao-mensagem .ico {
+  width: 18px;
+  height: 18px;
+  flex: 0 0 18px;
+}
+
+.mensagem-acoes {
+  gap: 7px;
+}
+
+/* Botão responder */
+.acao-mensagem:not(.excluir) {
+  color: #f4d7ef;
+}
+
+/* Botão excluir */
+.acao-mensagem.excluir {
+  color: #ffb4c1;
+}
+
+/* Destaque quando o mouse passar */
+.acao-mensagem:hover {
+  transform: translateY(-1px);
+}
+
+/* Ajuste para telas pequenas */
+@media (max-width: 620px) {
+  .acao-mensagem,
+  .mensagem-linha.recebida .acao-mensagem {
+    width: 36px;
+    min-width: 36px;
+    height: 36px;
+    min-height: 36px;
+    padding: 0;
+  }
+}
