@@ -914,3 +914,75 @@ if (document.readyState === 'loading') {
 } else {
   iniciar();
 }
+
+
+document.addEventListener("DOMContentLoaded", () => {
+  const inicio = document.querySelector(".titulo-inicio");
+  const destaque = document.querySelector(".titulo-destaque");
+  const cursor = document.querySelector(".cursor-digitacao");
+
+  if (!inicio || !destaque || !cursor) return;
+
+  const texto1 = "Seu catálogo, ";
+  const texto2 = "mais inteligente.";
+  const textoCompleto = texto1 + texto2;
+
+  let indice = 0;
+  let apagando = false;
+
+  const velocidadeEscrita = 75;
+  const velocidadeApagar = 40;
+  const pausaFinal = 3000;
+  const pausaReinicio = 500;
+
+  function animarTexto() {
+    if (!apagando) {
+      // Escreve letra por letra
+      indice++;
+
+      if (indice <= texto1.length) {
+        inicio.textContent = textoCompleto.slice(0, indice);
+        destaque.textContent = "";
+      } else {
+        inicio.textContent = texto1;
+        destaque.textContent = textoCompleto.slice(
+          texto1.length,
+          indice
+        );
+      }
+
+      if (indice >= textoCompleto.length) {
+        apagando = true;
+        setTimeout(animarTexto, pausaFinal);
+        return;
+      }
+
+      setTimeout(animarTexto, velocidadeEscrita);
+
+    } else {
+      // Apaga letra por letra
+      indice--;
+
+      if (indice >= texto1.length) {
+        destaque.textContent = textoCompleto.slice(
+          texto1.length,
+          indice
+        );
+      } else {
+        inicio.textContent = texto1.slice(0, indice);
+        destaque.textContent = "";
+      }
+
+      if (indice <= 0) {
+        apagando = false;
+        setTimeout(animarTexto, pausaReinicio);
+        return;
+      }
+
+      setTimeout(animarTexto, velocidadeApagar);
+    }
+  }
+
+  // Começa a animação
+  animarTexto();
+});
