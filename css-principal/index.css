@@ -404,7 +404,9 @@ a {
 
 /* Piscar do cursor */
 @keyframes cursorPiscando {
-  0%, 100% {
+
+  0%,
+  100% {
     opacity: 1;
   }
 
@@ -422,6 +424,44 @@ a {
 @media (prefers-reduced-motion: reduce) {
   .hero h1 .cursor-digitacao {
     animation: none;
+  }
+}
+
+
+/* ==========================================
+   B.LIVE — SUBTÍTULO PREMIUM
+   Fade Up + Blur Reveal
+   ========================================== */
+
+.hero-descricao {
+  opacity: 0;
+  transform: translateY(15px);
+  filter: blur(5px);
+
+  animation: revelarSubtitulo 0.9s cubic-bezier(0.22, 1, 0.36, 1) 1.2s forwards;
+}
+
+@keyframes revelarSubtitulo {
+  0% {
+    opacity: 0;
+    transform: translateY(15px);
+    filter: blur(5px);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+    filter: blur(0);
+  }
+}
+
+/* Acessibilidade */
+@media (prefers-reduced-motion: reduce) {
+  .hero-descricao {
+    animation: none;
+    opacity: 1;
+    transform: none;
+    filter: none;
   }
 }
 
