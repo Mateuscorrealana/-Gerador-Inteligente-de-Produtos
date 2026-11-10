@@ -369,9 +369,8 @@ a {
   box-shadow: var(--sombra);
 }
 
-
 /* ==========================================
-   B.LIVE — ANIMAÇÃO DE ESCRITA DO HERO
+   TÍTULO — ANIMAÇÃO DE ESCRITA
    ========================================== */
 
 #pagina-titulo {
@@ -379,30 +378,24 @@ a {
   white-space: normal;
 }
 
-/* Primeira parte: branco */
 .hero h1 .titulo-inicio {
   color: #f4f2f8;
 }
 
-/* Segunda parte: rosa da marca */
 .hero h1 .titulo-destaque {
   color: #f3a9e3;
 }
 
-/* Cursor de digitação */
 .hero h1 .cursor-digitacao {
   display: inline-block;
   width: 2px;
-  height: 0.9em;
+  height: .9em;
   margin-left: 3px;
-
   background-color: #f3a9e3;
-  vertical-align: -0.08em;
-
-  animation: cursorPiscando 0.75s step-end infinite;
+  vertical-align: -.08em;
+  animation: cursorPiscando .75s step-end infinite;
 }
 
-/* Piscar do cursor */
 @keyframes cursorPiscando {
 
   0%,
@@ -415,43 +408,56 @@ a {
   }
 }
 
-/* Cursor desaparece ao finalizar */
 .hero h1 .cursor-digitacao.finalizado {
   display: none;
 }
 
-/* Acessibilidade */
-@media (prefers-reduced-motion: reduce) {
-  .hero h1 .cursor-digitacao {
-    animation: none;
-  }
-}
-
-
 /* ==========================================
-   B.LIVE — SUBTÍTULO PREMIUM
-   Fade Up + Blur Reveal
+   NOVA ANIMAÇÃO — TEXT SHIMMER PREMIUM
+   BRILHO ROSA + BRANCO CONTÍNUO
+
+   O efeito se repete a cada 5 segundos.
    ========================================== */
 
 .hero-descricao {
-  opacity: 0;
-  transform: translateY(15px);
-  filter: blur(5px);
+  max-width: 575px;
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.75;
+  color: #d3cbd9;
 
-  animation: revelarSubtitulo 0.9s cubic-bezier(0.22, 1, 0.36, 1) 1.2s forwards;
+  /* Gradiente aplicado sobre as letras */
+  background-image: linear-gradient(105deg,
+      #d3cbd9 0%,
+      #d3cbd9 36%,
+      #f3a9e3 45%,
+      #ffffff 50%,
+      #f3a9e3 55%,
+      #d3cbd9 64%,
+      #d3cbd9 100%);
+
+  background-size: 250% 100%;
+  background-position: 100% 50%;
+
+  /* Recorta o brilho dentro do texto */
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+
+  /* Movimento infinito */
+  animation: brilhoInteligente 5s linear infinite;
 }
 
-@keyframes revelarSubtitulo {
-  0% {
-    opacity: 0;
-    transform: translateY(15px);
-    filter: blur(5px);
+@keyframes brilhoInteligente {
+
+  0%,
+  10% {
+    background-position: 100% 50%;
   }
 
+  85%,
   100% {
-    opacity: 1;
-    transform: translateY(0);
-    filter: blur(0);
+    background-position: 0% 50%;
   }
 }
 
@@ -459,12 +465,19 @@ a {
 @media (prefers-reduced-motion: reduce) {
   .hero-descricao {
     animation: none;
-    opacity: 1;
-    transform: none;
-    filter: none;
+    background: none;
+    -webkit-text-fill-color: #d3cbd9;
+    color: #d3cbd9;
+  }
+
+  .hero h1 .cursor-digitacao {
+    animation: none;
   }
 }
 
+/* ==========================================
+   RESTANTE DO HERO
+   ========================================== */
 
 .eyebrow {
   display: flex;
@@ -495,14 +508,6 @@ a {
 
 .hero h1 span {
   color: #f3a9e3;
-}
-
-.hero-descricao {
-  max-width: 575px;
-  margin: 0;
-  font-size: 13px;
-  line-height: 1.75;
-  color: #d3cbd9;
 }
 
 .hero-tags {
@@ -783,7 +788,7 @@ textarea {
 }
 
 .entrada-manual summary::after {
-  content: '+';
+  content: "+";
   position: absolute;
   right: 17px;
   top: 13px;
@@ -793,7 +798,7 @@ textarea {
 }
 
 .entrada-manual[open] summary::after {
-  content: '−';
+  content: "−";
 }
 
 .entrada-manual summary span {
@@ -875,7 +880,7 @@ textarea {
 }
 
 .passos li::before {
-  content: '○';
+  content: "○";
   width: 25px;
   height: 25px;
   flex: 0 0 25px;
@@ -895,7 +900,7 @@ textarea {
 }
 
 .passos li.ok::before {
-  content: '✓';
+  content: "✓";
   border-color: #69bf94;
   color: #143627;
   background: #77d5ab;
@@ -1004,7 +1009,7 @@ textarea {
 #tab-marketplaces:checked~.abas label[for="tab-marketplaces"]::after,
 #tab-seo:checked~.abas label[for="tab-seo"]::after,
 #tab-imagens:checked~.abas label[for="tab-imagens"]::after {
-  content: '';
+  content: "";
   position: absolute;
   left: 10px;
   right: 10px;
@@ -1146,10 +1151,8 @@ textarea {
 }
 
 /* ==================================================
-   ABAS DO EDITOR — MANTÉM A INTEGRAÇÃO COM O JS
-   Ordem: 1 palavras, 2 benefícios, 3 título,
-   4 subtítulo, 5 descrição, 6 resumida,
-   7 marketplace, 8 SEO, 9 meta.
+   ABAS DO EDITOR
+   MANTÉM A INTEGRAÇÃO COM O JS
    ================================================== */
 
 .editor-workspace .lista-resultados>.secao {
@@ -1668,32 +1671,24 @@ textarea {
   background: #ad519e;
 }
 
-
-/* ==============================================
+/* ==================================================
    B.LIVE — EXCLUIR PRODUTO DA BIBLIOTECA
-   DARK MODE
-   ============================================== */
+   ================================================== */
 
 .btn-excluir-produto {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 8px;
-
   min-height: 44px;
   min-width: 115px;
-
   padding: 10px 16px;
-
   background: #5b303d;
   color: #ffd7dc;
-
   border: 1px solid #b96b7a;
   border-radius: 10px;
-
   font-size: 12px;
   font-weight: 750;
-
   transition:
     background .2s ease,
     border-color .2s ease,
@@ -1726,14 +1721,43 @@ textarea {
   outline-offset: 3px;
 }
 
-/* Responsividade */
-
 @media (max-width: 600px) {
-
   .btn-excluir-produto {
     width: 100%;
     min-height: 46px;
     justify-content: center;
   }
+}
 
+
+/* ==========================================
+   B.LIVE — FLOATING TEXT + SHIMMER
+   Subtítulo com movimento contínuo
+   ========================================== */
+
+.hero-descricao {
+  animation:
+    brilhoInteligente 5s linear infinite,
+    flutuarSubtitulo 4s ease-in-out infinite;
+}
+
+/* Movimento suave de flutuação */
+@keyframes flutuarSubtitulo {
+
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-4px);
+  }
+}
+
+/* Respeita preferências de acessibilidade */
+@media (prefers-reduced-motion: reduce) {
+  .hero-descricao {
+    animation: none;
+    transform: none;
+  }
 }
