@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="pt-BR">
 
@@ -7,90 +6,158 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#23172b">
 
-  <meta
-    name="description"
-    content="Espaço interno da B.live in Pets para conversas sobre e-commerce."
-  >
+  <meta name="description" content="Espaço interno da B.live in Pets para conversas sobre e-commerce.">
 
   <title>Chat E-commerce | B.live Intelligence</title>
 
   <link rel="icon" type="image/jpeg" href="/logo/images.jpg">
+
+
+  <script>
+    (() => {
+      'use strict';
+
+      const CHAVE_TEMA = 'blive-tema-v2';
+      const raiz = document.documentElement;
+
+      function lerTema() {
+        try {
+          return localStorage.getItem(CHAVE_TEMA) === 'dark'
+            ? 'dark'
+            : 'light';
+        } catch {
+          return 'light';
+        }
+      }
+
+      function aplicarTema(tema) {
+        raiz.dataset.theme = tema;
+        raiz.style.colorScheme = tema;
+
+        const toggle = document.getElementById('toggleTema');
+
+        if (toggle) {
+          toggle.checked = tema === 'dark';
+        }
+      }
+
+      // Aplica o tema antes da página ser renderizada.
+      aplicarTema(lerTema());
+
+      document.addEventListener('DOMContentLoaded', () => {
+        const botao = document.getElementById('btnConfiguracoes');
+        const painel = document.getElementById('painelConfiguracoes');
+        const toggle = document.getElementById('toggleTema');
+
+        if (!botao || !painel || !toggle) return;
+
+        painel.hidden = true;
+        botao.setAttribute('aria-expanded', 'false');
+
+        toggle.checked = raiz.dataset.theme === 'dark';
+
+        // Abrir ou fechar configurações.
+        botao.addEventListener('click', () => {
+          const abrir = painel.hidden;
+
+          painel.hidden = !abrir;
+
+          botao.setAttribute(
+            'aria-expanded',
+            String(abrir)
+          );
+        });
+
+        // Alternar modo claro e escuro.
+        toggle.addEventListener('change', () => {
+          const tema = toggle.checked ? 'dark' : 'light';
+
+          aplicarTema(tema);
+
+          try {
+            localStorage.setItem(CHAVE_TEMA, tema);
+          } catch {
+            console.warn('Não foi possível salvar o tema.');
+          }
+        });
+
+      }, { once: true });
+    })();
+  </script>
+
   <link rel="stylesheet" href="/css-principal/chat.css">
 </head>
 
 <body>
 
   <!-- ÍCONES DO SISTEMA -->
-  <svg
-    class="svg-sprite"
-    xmlns="http://www.w3.org/2000/svg"
-    aria-hidden="true"
-  >
+  <svg class="svg-sprite" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
 
     <symbol id="ico-painel" viewBox="0 0 24 24">
-      <rect x="3" y="3" width="7" height="7" rx="1.5"/>
-      <rect x="14" y="3" width="7" height="7" rx="1.5"/>
-      <rect x="3" y="14" width="7" height="7" rx="1.5"/>
-      <rect x="14" y="14" width="7" height="7" rx="1.5"/>
+      <rect x="3" y="3" width="7" height="7" rx="1.5" />
+      <rect x="14" y="3" width="7" height="7" rx="1.5" />
+      <rect x="3" y="14" width="7" height="7" rx="1.5" />
+      <rect x="14" y="14" width="7" height="7" rx="1.5" />
     </symbol>
 
     <symbol id="ico-chat" viewBox="0 0 24 24">
-      <path d="M21 11.5a8.4 8.4 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.4 8.4 0 0 1-3.8-.9L3 21l1.9-5.7a8.4 8.4 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.4 8.4 0 0 1 3.8-.9h.5a8.5 8.5 0 0 1 8 8v.5z"/>
+      <path
+        d="M21 11.5a8.4 8.4 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.4 8.4 0 0 1-3.8-.9L3 21l1.9-5.7a8.4 8.4 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.4 8.4 0 0 1 3.8-.9h.5a8.5 8.5 0 0 1 8 8v.5z" />
     </symbol>
 
     <symbol id="ico-plus" viewBox="0 0 24 24">
-      <path d="M12 5v14M5 12h14"/>
-      <circle cx="12" cy="12" r="9"/>
+      <path d="M12 5v14M5 12h14" />
+      <circle cx="12" cy="12" r="9" />
     </symbol>
 
     <symbol id="ico-editor" viewBox="0 0 24 24">
-      <rect x="5" y="3" width="14" height="18" rx="2"/>
-      <path d="M9 8h6M9 12h6M9 16h4"/>
+      <rect x="5" y="3" width="14" height="18" rx="2" />
+      <path d="M9 8h6M9 12h6M9 16h4" />
     </symbol>
 
     <symbol id="ico-pasta" viewBox="0 0 24 24">
-      <path d="M3 7a2 2 0 0 1 2-2h5l2 2h7a2 2 0 0 1 2 2v10H3z"/>
-      <path d="M3 10h18"/>
+      <path d="M3 7a2 2 0 0 1 2-2h5l2 2h7a2 2 0 0 1 2 2v10H3z" />
+      <path d="M3 10h18" />
     </symbol>
 
     <symbol id="ico-seta" viewBox="0 0 24 24">
-      <path d="m12 19-7-7 7-7M5 12h14"/>
+      <path d="m12 19-7-7 7-7M5 12h14" />
     </symbol>
 
     <symbol id="ico-busca" viewBox="0 0 24 24">
-      <circle cx="11" cy="11" r="7"/>
-      <path d="m20 20-4-4"/>
+      <circle cx="11" cy="11" r="7" />
+      <path d="m20 20-4-4" />
     </symbol>
 
     <symbol id="ico-clip" viewBox="0 0 24 24">
-      <path d="m21.5 11.5-8.9 8.9a6 6 0 0 1-8.5-8.5l9.2-9.2a4 4 0 0 1 5.7 5.7l-9.2 9.2a2 2 0 0 1-2.8-2.8l8.5-8.5"/>
+      <path d="m21.5 11.5-8.9 8.9a6 6 0 0 1-8.5-8.5l9.2-9.2a4 4 0 0 1 5.7 5.7l-9.2 9.2a2 2 0 0 1-2.8-2.8l8.5-8.5" />
     </symbol>
 
     <symbol id="ico-emoji" viewBox="0 0 24 24">
-      <circle cx="12" cy="12" r="9"/>
-      <path d="M8 14s1.5 2 4 2 4-2 4-2"/>
-      <path d="M9 9h.01M15 9h.01" stroke-width="3"/>
+      <circle cx="12" cy="12" r="9" />
+      <path d="M8 14s1.5 2 4 2 4-2 4-2" />
+      <path d="M9 9h.01M15 9h.01" stroke-width="3" />
     </symbol>
 
     <symbol id="ico-enviar" viewBox="0 0 24 24">
-      <path d="m22 2-7 20-4-9-9-4zM22 2 11 13"/>
+      <path d="m22 2-7 20-4-9-9-4zM22 2 11 13" />
     </symbol>
 
     <symbol id="ico-lixeira" viewBox="0 0 24 24">
-      <path d="M3 6h18M8 6V4h8v2M6 6l1 15h10l1-15M10 10v7M14 10v7"/>
+      <path d="M3 6h18M8 6V4h8v2M6 6l1 15h10l1-15M10 10v7M14 10v7" />
     </symbol>
 
     <symbol id="ico-fechar" viewBox="0 0 24 24">
-      <path d="M18 6 6 18M6 6l12 12"/>
+      <path d="M18 6 6 18M6 6l12 12" />
     </symbol>
 
     <symbol id="ico-check" viewBox="0 0 24 24">
-      <path d="m5 12 4 4L19 6"/>
+      <path d="m5 12 4 4L19 6" />
     </symbol>
 
     <symbol id="ico-responder" viewBox="0 0 24 24">
-      <path d="m9 10-5 5 5 5"/>
-      <path d="M20 5v5a5 5 0 0 1-5 5H4"/>
+      <path d="m9 10-5 5 5 5" />
+      <path d="M20 5v5a5 5 0 0 1-5 5H4" />
     </symbol>
 
   </svg>
@@ -103,11 +170,8 @@
       <a class="marca" href="./index.html#inicio">
 
         <span class="marca-logo">
-          <img
-            src="/logo/images.jpg"
-            alt="Logo B.live"
-            onerror="this.style.display='none';this.parentElement.textContent='B.'"
-          >
+          <img src="/logo/images.jpg" alt="Logo B.live"
+            onerror="this.style.display='none';this.parentElement.textContent='B.'">
         </span>
 
         <span class="marca-texto">
@@ -127,30 +191,42 @@
 
           <a class="menu-link" href="./index.html#inicio">
             <svg class="ico">
-              <use href="#ico-painel"/>
+              <use href="#ico-painel" />
             </svg>
             <span>Painel inicial</span>
           </a>
 
-          <a
-            class="menu-link ativo"
-            href="./chat.html"
-            aria-current="page"
-          >
+          <a class="menu-link ativo" href="./chat.html" aria-current="page">
             <svg class="ico">
-              <use href="#ico-chat"/>
+              <use href="#ico-chat" />
             </svg>
             <span>Chat</span>
           </a>
       </div>
 
+
+      <!-- CONFIGURAÇÕES DO CHAT -->
       <div class="sidebar-rodape">
 
-        <span class="sidebar-ponto"></span>
+        <button type="button" class="config-botao" id="btnConfiguracoes" aria-expanded="false"
+          aria-controls="painelConfiguracoes">
+          <img src="/assets/configuracao.svg" alt="" class="sidebar-config-icone" aria-hidden="true">
 
-        <div>
-          <strong>Ambiente interno</strong>
-          <small>B.live in Pets</small>
+          <strong>Configurações</strong>
+        </button>
+
+        <!-- Painel oculto inicialmente -->
+        <div class="painel-configuracoes" id="painelConfiguracoes" hidden>
+
+          <label class="config-linha">
+            <span>Modo escuro</span>
+
+            <span class="switch">
+              <input type="checkbox" id="toggleTema" aria-label="Ativar modo escuro">
+              <span class="slider round"></span>
+            </span>
+          </label>
+
         </div>
 
       </div>
@@ -166,7 +242,7 @@
 
           <span class="topbar-icon">
             <svg class="ico">
-              <use href="#ico-chat"/>
+              <use href="#ico-chat" />
             </svg>
           </span>
 
@@ -178,23 +254,15 @@
 
         <div class="topbar-conta">
 
-          <span
-            class="auth-usuario"
-            id="authUser"
-          ></span>
+          <span class="auth-usuario" id="authUser"></span>
 
-          <button
-            class="btn-sair"
-            id="logoutGoogle"
-            type="button"
-            hidden
-          >
+          <button class="btn-sair" id="logoutGoogle" type="button" hidden>
             Sair
           </button>
 
           <a class="voltar" href="./index.html#inicio">
             <svg class="ico">
-              <use href="#ico-seta"/>
+              <use href="#ico-seta" />
             </svg>
             <span>Voltar ao gerador</span>
           </a>
@@ -220,11 +288,7 @@
 
           </div>
 
-          <span
-            class="status-demo"
-            id="chatStatus"
-            role="status"
-          >
+          <span class="status-demo" id="chatStatus" role="status">
             <span class="status-dot"></span>
             <span class="status-text">
               Verificando login…
@@ -234,11 +298,7 @@
         </div>
 
         <!-- LOGIN -->
-        <section
-          class="auth-panel"
-          id="authPanel"
-          aria-label="Acesso ao chat"
-        >
+        <section class="auth-panel" id="authPanel" aria-label="Acesso ao chat">
 
           <div class="auth-icone" aria-hidden="true">
             🔒
@@ -250,11 +310,7 @@
             Verificando sua conta Google…
           </p>
 
-          <button
-            class="btn-google"
-            id="loginGoogle"
-            type="button"
-          >
+          <button class="btn-google" id="loginGoogle" type="button">
             Entrar com Google
           </button>
 
@@ -266,12 +322,7 @@
         </section>
 
         <!-- CHAT ÚNICO -->
-        <section
-          class="chat-app"
-          id="chatApp"
-          aria-label="Chat interno da B.live"
-          hidden
-        >
+        <section class="chat-app" id="chatApp" aria-label="Chat interno da B.live" hidden>
 
           <div class="chat-principal">
 
@@ -293,15 +344,11 @@
                 <label class="busca">
 
                   <svg class="ico">
-                    <use href="#ico-busca"/>
+                    <use href="#ico-busca" />
                   </svg>
 
-                  <input
-                    type="search"
-                    id="messageSearch"
-                    placeholder="Buscar nas últimas 100 mensagens"
-                    aria-label="Buscar nas últimas 100 mensagens"
-                  >
+                  <input type="search" id="messageSearch" placeholder="Buscar nas últimas 100 mensagens"
+                    aria-label="Buscar nas últimas 100 mensagens">
 
                 </label>
 
@@ -310,13 +357,8 @@
             </div>
 
             <!-- MENSAGENS -->
-            <div
-              class="mensagens"
-              id="messages"
-              role="log"
-              aria-label="Mensagens do Chat Geral da B.live"
-              aria-live="polite"
-            >
+            <div class="mensagens" id="messages" role="log" aria-label="Mensagens do Chat Geral da B.live"
+              aria-live="polite">
 
               <div class="chat-vazio" id="emptyState">
 
@@ -341,24 +383,15 @@
 
 
               <!-- PAINEL DE EMOJIS -->
-              <div
-                class="picker escondido"
-                id="picker"
-                aria-label="Emojis e figurinhas"
-              >
+              <div class="picker escondido" id="picker" aria-label="Emojis e figurinhas">
 
                 <div class="picker-topo">
 
                   <strong>Emojis e figurinhas</strong>
 
-                  <button
-                    class="icone-botao"
-                    id="closePicker"
-                    type="button"
-                    aria-label="Fechar"
-                  >
+                  <button class="icone-botao" id="closePicker" type="button" aria-label="Fechar">
                     <svg class="ico">
-                      <use href="#ico-fechar"/>
+                      <use href="#ico-fechar" />
                     </svg>
                   </button>
 
@@ -387,29 +420,13 @@
 
                 <div class="picker-stickers">
 
-                  <button
-                    type="button"
-                    data-sticker="💜"
-                    aria-label="Enviar figurinha de coração"
-                  >💜</button>
+                  <button type="button" data-sticker="💜" aria-label="Enviar figurinha de coração">💜</button>
 
-                  <button
-                    type="button"
-                    data-sticker="🐶"
-                    aria-label="Enviar figurinha de cachorro"
-                  >🐶</button>
+                  <button type="button" data-sticker="🐶" aria-label="Enviar figurinha de cachorro">🐶</button>
 
-                  <button
-                    type="button"
-                    data-sticker="🎉"
-                    aria-label="Enviar figurinha de comemoração"
-                  >🎉</button>
+                  <button type="button" data-sticker="🎉" aria-label="Enviar figurinha de comemoração">🎉</button>
 
-                  <button
-                    type="button"
-                    data-sticker="✅"
-                    aria-label="Enviar figurinha de concluído"
-                  >✅</button>
+                  <button type="button" data-sticker="✅" aria-label="Enviar figurinha de concluído">✅</button>
 
                 </div>
 
@@ -421,18 +438,9 @@
               </div>
 
               <!-- PRÉVIA DA MENSAGEM RESPONDIDA -->
-              <div
-                class="reply-preview"
-                id="replyPreview"
-                role="region"
-                aria-label="Respondendo a uma mensagem"
-                hidden
-              >
+              <div class="reply-preview" id="replyPreview" role="region" aria-label="Respondendo a uma mensagem" hidden>
 
-                <div
-                  class="reply-preview-bar"
-                  aria-hidden="true"
-                ></div>
+                <div class="reply-preview-bar" aria-hidden="true"></div>
 
                 <div class="reply-preview-text">
 
@@ -444,73 +452,41 @@
 
                 </div>
 
-                <button
-                  class="icone-botao reply-cancel"
-                  id="cancelReply"
-                  type="button"
-                  title="Cancelar resposta"
-                  aria-label="Cancelar resposta"
-                >
+                <button class="icone-botao reply-cancel" id="cancelReply" type="button" title="Cancelar resposta"
+                  aria-label="Cancelar resposta">
                   <svg class="ico">
-                    <use href="#ico-fechar"/>
+                    <use href="#ico-fechar" />
                   </svg>
                 </button>
 
               </div>
 
               <!-- FORMULÁRIO -->
-              <form
-                class="composer"
-                id="composer"
-                autocomplete="off"
-              >
+              <form class="composer" id="composer" autocomplete="off">
 
-                <button
-                  class="icone-botao"
-                  id="attachButton"
-                  type="button"
-                  aria-label="Anexar arquivo"
-                  title="Anexos disponíveis após configurar o Firebase Storage"
-                >
+                <button class="icone-botao" id="attachButton" type="button" aria-label="Anexar arquivo"
+                  title="Anexos disponíveis após configurar o Firebase Storage">
                   <svg class="ico">
-                    <use href="#ico-clip"/>
+                    <use href="#ico-clip" />
                   </svg>
                 </button>
 
-                <button
-                  class="icone-botao"
-                  id="emojiButton"
-                  type="button"
-                  aria-label="Emojis e figurinhas"
-                  aria-expanded="false"
-                >
+                <button class="icone-botao" id="emojiButton" type="button" aria-label="Emojis e figurinhas"
+                  aria-expanded="false">
                   <svg class="ico">
-                    <use href="#ico-emoji"/>
+                    <use href="#ico-emoji" />
                   </svg>
                 </button>
 
-                <label
-                  class="visually-hidden"
-                  for="messageInput"
-                >
+                <label class="visually-hidden" for="messageInput">
                   Sua mensagem
                 </label>
 
-                <textarea
-                  id="messageInput"
-                  rows="1"
-                  maxlength="4000"
-                  placeholder="Escreva uma mensagem..."
-                ></textarea>
+                <textarea id="messageInput" rows="1" maxlength="4000" placeholder="Escreva uma mensagem..."></textarea>
 
-                <button
-                  class="enviar"
-                  id="sendButton"
-                  type="submit"
-                  aria-label="Enviar mensagem"
-                >
+                <button class="enviar" id="sendButton" type="submit" aria-label="Enviar mensagem">
                   <svg class="ico">
-                    <use href="#ico-enviar"/>
+                    <use href="#ico-enviar" />
                   </svg>
                 </button>
 
@@ -529,12 +505,7 @@
   </div>
 
   <!-- NOTIFICAÇÕES -->
-  <div
-    class="toast"
-    id="chatToast"
-    role="status"
-    aria-live="polite"
-  ></div>
+  <div class="toast" id="chatToast" role="status" aria-live="polite"></div>
 
   <!-- DIAGNÓSTICO DE CARREGAMENTO -->
   <script>
@@ -574,10 +545,8 @@
   </script>
 
   <!-- FIREBASE -->
-  <script
-    type="module"
-    src="./js/chat.js"
-  ></script>
+  <script type="module" src="./js/chat.js"></script>
 
 </body>
+
 </html>
