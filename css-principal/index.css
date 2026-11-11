@@ -1,8 +1,3 @@
-/* ==================================================
-   B.LIVE INTELLIGENCE — DARK MODE
-   GERADOR DE PRODUTOS
-   ================================================== */
-
 :root {
   color-scheme: dark;
   --roxo: #df8dd0;
@@ -41,8 +36,7 @@ body {
   margin: 0;
   background: var(--fundo);
   color: var(--texto);
-  font: 400 15px/1.55 Inter, "Segoe UI", system-ui,
-    -apple-system, Roboto, sans-serif;
+  font: 400 15px/1.55 Inter, "Segoe UI", system-ui, -apple-system, Roboto, sans-serif;
 }
 
 button,
@@ -82,9 +76,7 @@ a {
   outline-offset: 3px;
 }
 
-/* ==================================================
-   ESTRUTURA
-   ================================================== */
+/* ESTRUTURA */
 
 .app-shell {
   display: grid;
@@ -235,8 +227,6 @@ a {
   min-width: 0;
 }
 
-/* HEADER */
-
 .topbar {
   height: 78px;
   display: flex;
@@ -272,9 +262,7 @@ a {
   padding: 38px clamp(20px, 4vw, 55px) 24px;
 }
 
-/* ==================================================
-   BOTÕES
-   ================================================== */
+/* BOTÕES */
 
 .btn {
   display: inline-flex;
@@ -290,8 +278,7 @@ a {
   font-weight: 800;
   letter-spacing: .015em;
   line-height: 1.35;
-  transition: transform .16s, box-shadow .16s,
-    background .16s, color .16s;
+  transition: transform .16s, box-shadow .16s, background .16s, color .16s;
   white-space: normal;
   text-align: center;
 }
@@ -346,9 +333,7 @@ a {
   }
 }
 
-/* ==================================================
-   HERO
-   ================================================== */
+/* HERO */
 
 .hero {
   position: relative;
@@ -362,16 +347,9 @@ a {
   overflow: hidden;
   border-radius: 22px;
   border: 1px solid #705674;
-  background: linear-gradient(115deg,
-      #302a39 0%,
-      #282b38 61%,
-      #3d2b42 100%);
+  background: linear-gradient(115deg, #302a39 0%, #282b38 61%, #3d2b42 100%);
   box-shadow: var(--sombra);
 }
-
-/* ==========================================
-   TÍTULO — ANIMAÇÃO DE ESCRITA
-   ========================================== */
 
 #pagina-titulo {
   position: relative;
@@ -412,39 +390,20 @@ a {
   display: none;
 }
 
-/* ==========================================
-   NOVA ANIMAÇÃO — TEXT SHIMMER PREMIUM
-   BRILHO ROSA + BRANCO CONTÍNUO
-
-   O efeito se repete a cada 5 segundos.
-   ========================================== */
-
 .hero-descricao {
   max-width: 575px;
   margin: 0;
   font-size: 13px;
   line-height: 1.75;
   color: #d3cbd9;
-
-  /* Gradiente aplicado sobre as letras */
   background-image: linear-gradient(105deg,
-      #d3cbd9 0%,
-      #d3cbd9 36%,
-      #f3a9e3 45%,
-      #ffffff 50%,
-      #f3a9e3 55%,
-      #d3cbd9 64%,
-      #d3cbd9 100%);
-
+      #d3cbd9 0%, #d3cbd9 36%, #f3a9e3 45%,
+      #ffffff 50%, #f3a9e3 55%, #d3cbd9 64%, #d3cbd9 100%);
   background-size: 250% 100%;
   background-position: 100% 50%;
-
-  /* Recorta o brilho dentro do texto */
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
-
-  /* Movimento infinito */
   animation: brilhoInteligente 5s linear infinite;
 }
 
@@ -461,8 +420,7 @@ a {
   }
 }
 
-/* Acessibilidade */
-@media (prefers-reduced-motion: reduce) {
+@media (prefers-reduced-motion:reduce) {
   .hero-descricao {
     animation: none;
     background: none;
@@ -474,10 +432,6 @@ a {
     animation: none;
   }
 }
-
-/* ==========================================
-   RESTANTE DO HERO
-   ========================================== */
 
 .eyebrow {
   display: flex;
@@ -602,9 +556,7 @@ a {
   color: #8acb96;
 }
 
-/* ==================================================
-   PAINÉIS E FORMULÁRIOS
-   ================================================== */
+/* PAINÉIS E FORMULÁRIOS */
 
 .painel {
   margin-bottom: 24px;
@@ -832,9 +784,7 @@ textarea {
   min-height: 49px;
 }
 
-/* ==================================================
-   PROGRESSO
-   ================================================== */
+/* PROGRESSO */
 
 .progresso-cabecalho {
   display: flex;
@@ -908,9 +858,7 @@ textarea {
   font-size: 14px;
 }
 
-/* ==================================================
-   EDITOR DE CONTEÚDO
-   ================================================== */
+/* EDITOR */
 
 .area-editor {
   margin: 28px 0 24px;
@@ -1150,10 +1098,7 @@ textarea {
   font-weight: 700;
 }
 
-/* ==================================================
-   ABAS DO EDITOR
-   MANTÉM A INTEGRAÇÃO COM O JS
-   ================================================== */
+/* ABAS */
 
 .editor-workspace .lista-resultados>.secao {
   display: none;
@@ -1270,9 +1215,7 @@ textarea {
   font-size: 11px;
 }
 
-/* ==================================================
-   BIBLIOTECA
-   ================================================== */
+/* BIBLIOTECA */
 
 .biblioteca {
   margin-top: 27px;
@@ -1319,9 +1262,7 @@ textarea {
   color: #b5b7c7;
 }
 
-/* ==================================================
-   NOTIFICAÇÕES
-   ================================================== */
+/* NOTIFICAÇÕES */
 
 .toast {
   position: fixed;
@@ -1350,11 +1291,9 @@ textarea {
   transform: translate(-50%, 0);
 }
 
-/* ==================================================
-   RESPONSIVIDADE
-   ================================================== */
+/* RESPONSIVIDADE */
 
-@media (max-width: 1100px) {
+@media (max-width:1100px) {
   .app-shell {
     grid-template-columns: 218px minmax(0, 1fr);
   }
@@ -1372,7 +1311,7 @@ textarea {
   }
 }
 
-@media (max-width: 840px) {
+@media (max-width:840px) {
   .app-shell {
     display: block;
   }
@@ -1437,7 +1376,7 @@ textarea {
   }
 }
 
-@media (max-width: 600px) {
+@media (max-width:600px) {
   .sidebar {
     padding: 15px 13px;
   }
@@ -1614,7 +1553,7 @@ textarea {
   }
 }
 
-@media (prefers-reduced-motion: reduce) {
+@media (prefers-reduced-motion:reduce) {
   html {
     scroll-behavior: auto;
   }
@@ -1627,9 +1566,7 @@ textarea {
   }
 }
 
-/* ==================================================
-   BOTÃO VOLTAR AO TOPO
-   ================================================== */
+/* VOLTAR AO TOPO */
 
 .back-to-top {
   position: fixed;
@@ -1650,9 +1587,7 @@ textarea {
   opacity: 0;
   visibility: hidden;
   transform: translateY(12px);
-  transition: opacity .3s ease,
-    transform .3s ease,
-    visibility .3s;
+  transition: opacity .3s ease, transform .3s ease, visibility .3s;
 }
 
 .back-to-top svg {
@@ -1671,9 +1606,7 @@ textarea {
   background: #ad519e;
 }
 
-/* ==================================================
-   B.LIVE — EXCLUIR PRODUTO DA BIBLIOTECA
-   ================================================== */
+/* EXCLUIR PRODUTO */
 
 .btn-excluir-produto {
   display: inline-flex;
@@ -1689,10 +1622,7 @@ textarea {
   border-radius: 10px;
   font-size: 12px;
   font-weight: 750;
-  transition:
-    background .2s ease,
-    border-color .2s ease,
-    transform .2s ease;
+  transition: background .2s ease, border-color .2s ease, transform .2s ease;
 }
 
 .btn-excluir-produto svg {
@@ -1705,7 +1635,7 @@ textarea {
 
 .btn-excluir-produto:not(:disabled):hover {
   background: #813e4d;
-  color: #ffffff;
+  color: #fff;
   border-color: #f29aaa;
   transform: translateY(-1px);
 }
@@ -1721,7 +1651,7 @@ textarea {
   outline-offset: 3px;
 }
 
-@media (max-width: 600px) {
+@media (max-width:600px) {
   .btn-excluir-produto {
     width: 100%;
     min-height: 46px;
@@ -1729,19 +1659,13 @@ textarea {
   }
 }
 
-
-/* ==========================================
-   B.LIVE — FLOATING TEXT + SHIMMER
-   Subtítulo com movimento contínuo
-   ========================================== */
+/* EFEITO DE BRILHO */
 
 .hero-descricao {
-  animation:
-    brilhoInteligente 5s linear infinite,
+  animation: brilhoInteligente 5s linear infinite,
     flutuarSubtitulo 4s ease-in-out infinite;
 }
 
-/* Movimento suave de flutuação */
 @keyframes flutuarSubtitulo {
 
   0%,
@@ -1754,10 +1678,505 @@ textarea {
   }
 }
 
-/* Respeita preferências de acessibilidade */
-@media (prefers-reduced-motion: reduce) {
+@media (prefers-reduced-motion:reduce) {
   .hero-descricao {
     animation: none;
     transform: none;
+  }
+}
+
+/* CONFIGURAÇÕES */
+
+.sidebar-rodape {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 10px;
+  width: 100%;
+  margin-top: auto;
+  padding: 15px 10px;
+  border-top: 1px solid #444354;
+}
+
+.sidebar-config-icone {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+  object-fit: contain;
+  filter: brightness(0) invert(1);
+  transition: transform .35s ease, filter .25s ease;
+}
+
+.sidebar-rodape strong {
+  font-size: 12px;
+  font-weight: 650;
+  color: #d5cede;
+}
+
+.sidebar-rodape:hover strong {
+  color: #f3a9e3;
+}
+
+.sidebar-config-topo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.sidebar-config-topo strong {
+  font-size: 12px;
+  font-weight: 750;
+  color: #f4f2f8;
+}
+
+.sidebar-config-opcao {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  cursor: pointer;
+  color: #d5cede;
+  font-size: 11px;
+}
+
+.config-botao {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  width: 100%;
+  min-height: 40px;
+  padding: 8px 4px;
+  background: transparent;
+  border: 0;
+  color: #f4f2f8;
+  text-align: left;
+  cursor: pointer;
+}
+
+.config-botao strong {
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.config-seta {
+  margin-left: auto;
+  font-size: 19px;
+  color: #c7bbce;
+  transition: transform .25s ease;
+}
+
+.config-botao[aria-expanded="true"] .config-seta {
+  transform: rotate(180deg);
+}
+
+.sidebar .painel-configuracoes {
+  display: none;
+}
+
+.sidebar .painel-configuracoes:not([hidden]) {
+  display: grid;
+  gap: 14px;
+  padding: 15px 10px 5px;
+  border-top: 1px solid #444354;
+}
+
+.config-linha {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  color: #d5cede;
+  font-size: 11px;
+  cursor: pointer;
+}
+
+/* SWITCHES */
+
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 42px;
+  height: 24px;
+  flex: 0 0 42px;
+}
+
+.switch input {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  margin: 0;
+  padding: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.slider {
+  position: absolute;
+  inset: 0;
+  background: #555767;
+  border: 1px solid #777586;
+  border-radius: 999px;
+  pointer-events: none;
+  transition: background .25s ease;
+}
+
+.slider.round {
+  border-radius: 999px;
+}
+
+.slider::before {
+  content: "";
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 16px;
+  height: 16px;
+  background: #fff;
+  border-radius: 50%;
+  transition: transform .25s ease;
+}
+
+.switch input:checked+.slider {
+  background: #b752a7;
+  border-color: #d98ecf;
+}
+
+.switch input:checked+.slider::before {
+  transform: translateX(18px);
+}
+
+.switch input:focus-visible+.slider {
+  outline: 2px solid #f3a9e3;
+  outline-offset: 3px;
+}
+
+@media (prefers-reduced-motion:reduce) {
+
+  .sidebar-config-icone,
+  .config-seta,
+  .slider,
+  .slider::before {
+    transition: none;
+  }
+}
+
+/* MODO CLARO */
+
+html[data-theme="light"] {
+  color-scheme: light;
+  --fundo: #f5f5f8;
+  --texto: #282636;
+  --suave: #666879;
+  --borda: #dad6e1;
+  --bl-surface: #fff;
+  --bl-raised: #f4f0f6;
+  --bl-field: #f8f7fa;
+  --bl-edge: #ded9e4;
+  --sombra: 0 12px 36px rgba(40, 35, 55, .07);
+}
+
+html[data-theme="light"] body {
+  background: var(--fundo);
+  color: var(--texto);
+}
+
+html[data-theme="light"] .sidebar {
+  background: #fff;
+  border-color: #ded9e4;
+}
+
+html[data-theme="light"] .sidebar-rodape,
+html[data-theme="light"] .sidebar .painel-configuracoes:not([hidden]) {
+  border-color: #ded9e4;
+}
+
+html[data-theme="light"] .config-botao,
+html[data-theme="light"] .config-linha,
+html[data-theme="light"] .marca-texto strong,
+html[data-theme="light"] .sidebar-titulo,
+html[data-theme="light"] .sidebar-rodape strong {
+  color: #353140;
+}
+
+html[data-theme="light"] .config-seta {
+  color: #777080;
+}
+
+html[data-theme="light"] .sidebar-config-icone {
+  filter: brightness(0);
+}
+
+html[data-theme="light"] .marca-texto small,
+html[data-theme="light"] .sidebar-rodape small {
+  color: #716b78;
+}
+
+html[data-theme="light"] .menu-link {
+  color: #353140;
+}
+
+html[data-theme="light"] .menu-link.ativo,
+html[data-theme="light"] .menu-link:hover {
+  color: #74326a;
+  background: #f4e5f1;
+  box-shadow: inset 3px 0 0 #ba5da9;
+}
+
+html[data-theme="light"] .topbar {
+  background: #fff;
+  border-color: #ded9e4;
+}
+
+html[data-theme="light"] .topbar-trilha,
+html[data-theme="light"] .topbar-trilha strong {
+  color: #514a5a;
+}
+
+html[data-theme="light"] .hero {
+  background: linear-gradient(115deg, #fff 0%, #f9f4fa 60%, #f1e5f3 100%);
+  border-color: #e4d2e6;
+}
+
+html[data-theme="light"] .hero h1 .titulo-inicio {
+  color: #292532;
+}
+
+html[data-theme="light"] .hero h1 .titulo-destaque {
+  color: #923d83;
+}
+
+html[data-theme="light"] .hero h1 .cursor-digitacao {
+  background: #923d83;
+}
+
+html[data-theme="light"] .eyebrow,
+html[data-theme="light"] .sobretitulo {
+  color: #923d83;
+}
+
+html[data-theme="light"] .hero-tags span {
+  background: #f6e9f4;
+  border-color: #e2c7de;
+  color: #713c6b;
+}
+
+html[data-theme="light"] .painel,
+html[data-theme="light"] .secao,
+html[data-theme="light"] .editor-workspace {
+  background: #fff;
+  border-color: #ded9e4;
+}
+
+html[data-theme="light"] .painel h2,
+html[data-theme="light"] .titulo-linha h2,
+html[data-theme="light"] .secao h3,
+html[data-theme="light"] .campo-rotulo {
+  color: #292532;
+}
+
+html[data-theme="light"] .entrada-bloco,
+html[data-theme="light"] .entrada-manual,
+html[data-theme="light"] .editor-introducao,
+html[data-theme="light"] .guia-lista>div {
+  background: #f8f7fa;
+  border-color: #ded9e4;
+  color: #464151;
+}
+
+html[data-theme="light"] input:not([type="checkbox"]):not([type="radio"]),
+html[data-theme="light"] select,
+html[data-theme="light"] textarea,
+html[data-theme="light"] .secao textarea,
+html[data-theme="light"] .campo-url {
+  background: #fff;
+  color: #292532;
+  border-color: #cfc9d8;
+}
+
+html[data-theme="light"] .campo-url input {
+  background: transparent !important;
+}
+
+html[data-theme="light"] input::placeholder,
+html[data-theme="light"] textarea::placeholder {
+  color: #8e8797;
+}
+
+html[data-theme="light"] select option {
+  background: #fff;
+  color: #292532;
+}
+
+html[data-theme="light"] .abas {
+  background: #f6f3f8;
+  border-color: #ded9e4;
+}
+
+html[data-theme="light"] .abas label {
+  color: #514b5b;
+}
+
+html[data-theme="light"] #tab-site:checked~.abas label[for="tab-site"],
+html[data-theme="light"] #tab-marketplaces:checked~.abas label[for="tab-marketplaces"],
+html[data-theme="light"] #tab-seo:checked~.abas label[for="tab-seo"],
+html[data-theme="light"] #tab-imagens:checked~.abas label[for="tab-imagens"] {
+  color: #74326a;
+  background: #f0e3ee;
+}
+
+html[data-theme="light"] .btn-discreto,
+html[data-theme="light"] .btn-topo {
+  background: #f3edf5;
+  color: #65395d;
+  border-color: #ddcbdc;
+}
+
+html[data-theme="light"] .ajuda,
+html[data-theme="light"] .contador,
+html[data-theme="light"] .biblioteca-aviso,
+html[data-theme="light"] .rodape,
+html[data-theme="light"] .guia-nota {
+  color: #676272;
+}
+
+/* TÍTULO — SEM OSCILAÇÃO DE LAYOUT */
+
+#pagina-titulo {
+  position: relative;
+  width: 100%;
+}
+
+#pagina-titulo::before {
+  content: "Seu catálogo, mais inteligente.";
+  display: block;
+  visibility: hidden;
+  white-space: normal;
+}
+
+#pagina-titulo .titulo-digitando {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+#pagina-titulo .titulo-inicio {
+  color: #f4f2f8;
+}
+
+#pagina-titulo .titulo-destaque {
+  color: #f3a9e3;
+}
+
+#pagina-titulo .cursor-digitacao {
+  display: inline-block;
+  width: 2px;
+  height: .9em;
+  margin-left: 3px;
+  vertical-align: -.08em;
+  background: #f3a9e3;
+  animation: cursorPiscando .75s step-end infinite;
+}
+
+#pagina-titulo .cursor-digitacao.finalizado {
+  display: none;
+}
+
+/* SUBTÍTULO ANIMADO */
+
+html[data-animacoes="on"] .hero-descricao {
+  opacity: 1 !important;
+  transform: none !important;
+  filter: none !important;
+  background-image: linear-gradient(105deg,
+      #d3cbd9 0%, #d3cbd9 36%, #f3a9e3 45%,
+      #fff 50%, #f3a9e3 55%, #d3cbd9 64%, #d3cbd9 100%);
+  background-size: 250% 100%;
+  background-position: 100% center;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: brilhoInteligente 5s linear infinite !important;
+}
+
+html[data-theme="light"][data-animacoes="on"] .hero-descricao {
+  background-image: linear-gradient(105deg,
+      #55505e 0%, #55505e 36%, #a24b92 45%,
+      #e98bcf 50%, #a24b92 55%, #55505e 64%, #55505e 100%);
+}
+
+@keyframes brilhoInteligente {
+
+  0%,
+  10% {
+    background-position: 100% center;
+  }
+
+  85%,
+  100% {
+    background-position: 0% center;
+  }
+}
+
+/* CORREÇÃO DO CONTRASTE NO MODO CLARO */
+
+html[data-theme="light"] #pagina-titulo .titulo-inicio {
+  color: #292532;
+}
+
+html[data-theme="light"] #pagina-titulo .titulo-destaque {
+  color: #813172;
+}
+
+html[data-theme="dark"] #pagina-titulo .titulo-inicio {
+  color: #f4f2f8;
+}
+
+html[data-theme="dark"] #pagina-titulo .titulo-destaque {
+  color: #f3a9e3;
+}
+
+/* CORREÇÃO DE ANIMAÇÕES DESATIVADAS */
+
+html[data-animacoes="off"] .hero-descricao {
+  opacity: 1 !important;
+  transform: none !important;
+  filter: none !important;
+  animation: none !important;
+  transition: none !important;
+  background: none !important;
+  background-image: none !important;
+  -webkit-background-clip: border-box !important;
+  background-clip: border-box !important;
+  -webkit-text-fill-color: #d3cbd9 !important;
+  color: #d3cbd9 !important;
+}
+
+html[data-theme="light"][data-animacoes="off"] .hero-descricao {
+  color: #55505e !important;
+  -webkit-text-fill-color: #55505e !important;
+}
+
+html[data-animacoes="off"] .cursor-digitacao,
+html[data-animacoes="off"] #pagina-titulo .cursor-digitacao {
+  display: none !important;
+}
+
+html[data-animacoes="off"],
+html[data-animacoes="off"] *,
+html[data-animacoes="off"] *::before,
+html[data-animacoes="off"] *::after {
+  scroll-behavior: auto !important;
+  animation: none !important;
+  transition: none !important;
+}
+
+@media (max-width:840px) {
+  .sidebar .sidebar-rodape {
+    display: flex;
   }
 }

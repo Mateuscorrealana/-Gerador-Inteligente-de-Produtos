@@ -13,10 +13,13 @@ const valorDe = (id) => ($(id)?.value || '').trim();
 function ligar(id, evento, funcao) {
   const el = $(id);
   if (el) el.addEventListener(evento, funcao);
-  else console.warn(`Elemento #${id} não encontrado no index.html.`);
 }
 
-const estado = { entrada: null, conteudo: null, dados: null };
+const estado = {
+  entrada: null,
+  conteudo: null,
+  dados: null
+};
 
 const SECOES = [
   { id: 'palavras', titulo: '1. Palavras-chave para busca interna' },
@@ -33,9 +36,9 @@ const SECOES = [
   { id: 'meta', titulo: '9. Meta Description', limite: 160 }
 ];
 
-/* =========================================================
-   ENTRADA DO PRODUTO
-   ========================================================= */
+// ==================================================
+// ENTRADA DO PRODUTO
+// ==================================================
 
 function coletarEntrada() {
   const entrada = {
@@ -54,7 +57,6 @@ function coletarEntrada() {
   if (entrada.url) {
     try {
       const u = new URL(entrada.url);
-
       if (!['http:', 'https:'].includes(u.protocol)) {
         throw new Error('Protocolo inválido');
       }
@@ -68,9 +70,9 @@ function coletarEntrada() {
   return entrada;
 }
 
-/* =========================================================
-   GERAR PRODUTO COM GEMINI
-   ========================================================= */
+// ==================================================
+// GERAÇÃO DE PRODUTOS
+// ==================================================
 
 async function analisarProduto() {
   const btn = $('btnAnalisar');
@@ -161,10 +163,9 @@ async function analisarProduto() {
     }
 
     $('resultados')?.scrollIntoView({
-      behavior: 'smooth',
+      behavior: movimentoPermitido() ? 'smooth' : 'auto',
       block: 'start'
     });
-
   } catch (erro) {
     console.error('Falha na geração:', erro);
 
@@ -177,7 +178,6 @@ async function analisarProduto() {
         ? 'A análise demorou demais. Tente novamente.'
         : erro.message || 'Não foi possível gerar o cadastro com IA.'
     );
-
   } finally {
     clearTimeout(timer);
     btn.disabled = false;
@@ -185,9 +185,9 @@ async function analisarProduto() {
   }
 }
 
-/* =========================================================
-   RESPOSTA EM ETAPAS DA API
-   ========================================================= */
+// ==================================================
+// LEITURA DA RESPOSTA DA API
+// ==================================================
 
 async function lerRespostaEmEtapas(resposta) {
   if (!resposta.body) {
@@ -221,15 +221,13 @@ async function lerRespostaEmEtapas(resposta) {
   }
 
   try {
-    for (; ;) {
+    for (;;) {
       const { value, done } = await leitor.read();
-
       if (done) break;
 
       buffer += decoder.decode(value, { stream: true });
 
       let posicao;
-
       while ((posicao = buffer.indexOf('\n')) >= 0) {
         processarLinha(buffer.slice(0, posicao));
         buffer = buffer.slice(posicao + 1);
@@ -247,15 +245,14 @@ async function lerRespostaEmEtapas(resposta) {
     }
 
     return resultado;
-
   } finally {
     leitor.releaseLock();
   }
 }
 
-/* =========================================================
-   NORMALIZAÇÃO E RENDERIZAÇÃO
-   ========================================================= */
+// ==================================================
+// NORMALIZAÇÃO DOS CONTEÚDOS
+// ==================================================
 
 const texto = (v) => (v == null ? '' : String(v).trim());
 
@@ -286,18 +283,16 @@ function normalizarConteudo(c) {
   };
 }
 
-/* =========================================================
-   BOTÕES DOS RESULTADOS
-   ========================================================= */
+// ==================================================
+// EDITOR DOS RESULTADOS
+// ==================================================
 
 function criarBotao(rotulo, acao) {
   const b = document.createElement('button');
-
   b.type = 'button';
   b.className = 'btn pequeno';
   b.textContent = rotulo;
   b.addEventListener('click', acao);
-
   return b;
 }
 
@@ -305,10 +300,6 @@ function ajustarAltura(ta) {
   ta.style.height = 'auto';
   ta.style.height = ta.scrollHeight + 6 + 'px';
 }
-
-/* =========================================================
-   RENDERIZAÇÃO DOS RESULTADOS
-   ========================================================= */
 
 function renderizarResultados() {
   const wrap = $('listaResultados');
@@ -360,14 +351,9 @@ function renderizarResultados() {
   SECOES.forEach(atualizarContador);
 }
 
-/* =========================================================
-   CONTADOR DE CARACTERES
-   ========================================================= */
-
 function atualizarContador(secao) {
   const ta = $('res-' + secao.id);
   const c = $('cont-' + secao.id);
-
   if (!ta || !c) return;
 
   const n = ta.value.length;
@@ -387,9 +373,9 @@ function atualizarContador(secao) {
   }
 }
 
-/* =========================================================
-   PROGRESSO — APENAS PASSOS 0 E 1
-   ========================================================= */
+// ==================================================
+// PROGRESSO
+// ==================================================
 
 function limparProgresso() {
   document.querySelectorAll('.passos li').forEach((li) => {
@@ -405,7 +391,6 @@ function marcarPasso(i) {
 
   if (passo) {
     passo.classList.add('ok');
-
     passo.setAttribute(
       'aria-label',
       passo.textContent.trim() + ' — concluído'
@@ -413,9 +398,9 @@ function marcarPasso(i) {
   }
 }
 
-/* =========================================================
-   NOTIFICAÇÕES
-   ========================================================= */
+// ==================================================
+// NOTIFICAÇÕES
+// ==================================================
 
 function mostrarToast(mensagem) {
   const t = $('toast');
@@ -435,9 +420,9 @@ function mostrarToast(mensagem) {
   }, 4000);
 }
 
-/* =========================================================
-   COPIAR RESULTADOS
-   ========================================================= */
+// ==================================================
+// CÓPIA DE CONTEÚDOS
+// ==================================================
 
 async function copiarResultado(valor, botao) {
   try {
@@ -445,10 +430,8 @@ async function copiarResultado(valor, botao) {
   } catch {
     const ta = document.createElement('textarea');
     ta.value = valor;
-
     document.body.appendChild(ta);
     ta.select();
-
     document.execCommand('copy');
     ta.remove();
   }
@@ -457,7 +440,6 @@ async function copiarResultado(valor, botao) {
 
   if (botao) {
     const original = botao.textContent;
-
     botao.textContent = 'COPIADO ✓';
     botao.classList.add('copiado');
 
@@ -480,9 +462,9 @@ function copiarTudo() {
   copiarResultado(completo, $('btnCopiarTudo'));
 }
 
-/* =========================================================
-   BIBLIOTECA — SALVAR, CARREGAR E LIMPAR
-   ========================================================= */
+// ==================================================
+// BIBLIOTECA LOCAL
+// ==================================================
 
 function lerSalvos() {
   try {
@@ -492,39 +474,27 @@ function lerSalvos() {
   }
 }
 
-
 function atualizarListaSalvos(selecionado) {
-
   const select = $('produtosSalvos');
   const botaoExcluir = $('btnExcluirProduto');
-
   if (!select) return;
 
   const chaves = Object.keys(lerSalvos());
-
   select.innerHTML = '';
 
   if (!chaves.length) {
-
-    select.appendChild(
-      new Option('Nenhum produto salvo', '')
-    );
+    select.appendChild(new Option('Nenhum produto salvo', ''));
 
     if (botaoExcluir) {
       botaoExcluir.disabled = true;
     }
-
     return;
   }
 
-  select.appendChild(
-    new Option('Selecione um produto salvo', '')
-  );
+  select.appendChild(new Option('Selecione um produto salvo', ''));
 
   chaves.forEach((chave) => {
-    select.appendChild(
-      new Option(chave, chave)
-    );
+    select.appendChild(new Option(chave, chave));
   });
 
   if (selecionado && chaves.includes(selecionado)) {
@@ -535,10 +505,6 @@ function atualizarListaSalvos(selecionado) {
     botaoExcluir.disabled = !select.value;
   }
 }
-
-/* =========================================================
-   SALVAR PRODUTO
-   ========================================================= */
 
 function salvarProduto() {
   if (!estado.conteudo || !estado.entrada) {
@@ -580,17 +546,12 @@ function salvarProduto() {
       CONFIG.chaveStorage,
       JSON.stringify(salvos)
     );
-
     atualizarListaSalvos(chave);
     mostrarToast('Produto salvo no navegador.');
   } catch {
     mostrarToast('Não foi possível salvar o produto no navegador.');
   }
 }
-
-/* =========================================================
-   CARREGAR PRODUTO
-   ========================================================= */
 
 function carregarProduto() {
   const salvo = lerSalvos()[$('produtosSalvos')?.value];
@@ -605,7 +566,6 @@ function carregarProduto() {
 
   ['url', 'nome', 'sku', 'info'].forEach((id) => {
     const el = $(id);
-
     if (el) {
       el.value = estado.entrada[id] || '';
     }
@@ -623,21 +583,12 @@ function carregarProduto() {
   mostrarToast('Produto carregado.');
 }
 
-
-/* ==============================================
-   EXCLUIR PRODUTO SALVO DA BIBLIOTECA
-   ============================================== */
-
 function excluirProdutoSalvo() {
-
   const select = $('produtosSalvos');
-
   const chave = select?.value;
 
   if (!chave) {
-    mostrarToast(
-      'Selecione um produto para excluir.'
-    );
+    mostrarToast('Selecione um produto para excluir.');
     return;
   }
 
@@ -645,15 +596,10 @@ function excluirProdutoSalvo() {
 
   if (!Object.prototype.hasOwnProperty.call(salvos, chave)) {
     atualizarListaSalvos();
-
-    mostrarToast(
-      'Esse produto não foi encontrado na biblioteca.'
-    );
-
+    mostrarToast('Esse produto não foi encontrado na biblioteca.');
     return;
   }
 
-  // Confirmação antes de apagar
   const confirmar = window.confirm(
     `Deseja realmente excluir este produto?\n\n` +
     `${chave}\n\n` +
@@ -663,41 +609,21 @@ function excluirProdutoSalvo() {
 
   if (!confirmar) return;
 
-  // Exclui somente o produto selecionado
   delete salvos[chave];
 
   try {
-
     localStorage.setItem(
       CONFIG.chaveStorage,
       JSON.stringify(salvos)
     );
 
-    // Atualiza a biblioteca
     atualizarListaSalvos();
-
-    mostrarToast(
-      'Produto excluído da biblioteca com sucesso!'
-    );
-
+    mostrarToast('Produto excluído da biblioteca com sucesso!');
   } catch (erro) {
-
-    console.error(
-      'Erro ao excluir produto:',
-      erro
-    );
-
-    mostrarToast(
-      'Não foi possível excluir o produto.'
-    );
-
+    console.error('Erro ao excluir produto:', erro);
+    mostrarToast('Não foi possível excluir o produto.');
   }
 }
-
-
-/* =========================================================
-   LIMPAR PRODUTO
-   ========================================================= */
 
 function limparProduto(confirmar = true, rolarTopo = true) {
   if (
@@ -712,7 +638,6 @@ function limparProduto(confirmar = true, rolarTopo = true) {
 
   ['url', 'nome', 'sku', 'info'].forEach((id) => {
     const el = $(id);
-
     if (el) {
       el.value = '';
     }
@@ -741,16 +666,12 @@ function limparProduto(confirmar = true, rolarTopo = true) {
   if (rolarTopo) {
     window.scrollTo({
       top: 0,
-      behavior: 'smooth'
+      behavior: movimentoPermitido() ? 'smooth' : 'auto'
     });
   }
 
   return true;
 }
-
-/* =========================================================
-   NOVO PRODUTO — BOTÃO DO HEADER
-   ========================================================= */
 
 function novoProduto() {
   if ($('btnAnalisar')?.disabled) {
@@ -778,63 +699,53 @@ function novoProduto() {
   limparProduto(false, false);
 
   $('entrada')?.scrollIntoView({
-    behavior: 'smooth',
+    behavior: movimentoPermitido() ? 'smooth' : 'auto',
     block: 'start'
   });
 
   $('url')?.focus({ preventScroll: true });
 }
 
-/* =========================================================
-   VOLTAR AO TOPO — BOTÃO FLUTUANTE
-   ========================================================= */
+// ==================================================
+// BOTÃO VOLTAR AO TOPO
+// ==================================================
+
+function movimentoPermitido() {
+  const desligado = document.documentElement.dataset.animacoes === 'off';
+  const reduzido = window.matchMedia?.(
+    '(prefers-reduced-motion: reduce)'
+  ).matches;
+  return !desligado && !reduzido;
+}
 
 function iniciarVoltarAoTopo() {
   const botao = $('backToTop');
-
-  // Não interfere no gerador se o botão não existir.
   if (!botao) return;
 
   function atualizarVisibilidade() {
-    // Aparece depois de rolar 300 pixels.
     const visivel = window.scrollY > 300;
-
     botao.classList.toggle('is-visible', visivel);
-
-    botao.setAttribute(
-      'aria-hidden',
-      String(!visivel)
-    );
-
+    botao.setAttribute('aria-hidden', String(!visivel));
     botao.tabIndex = visivel ? 0 : -1;
   }
 
-  // Ação ao clicar no botão.
   botao.addEventListener('click', () => {
-    const movimentoReduzido = window.matchMedia?.(
-      '(prefers-reduced-motion: reduce)'
-    ).matches;
-
     window.scrollTo({
       top: 0,
-      behavior: movimentoReduzido ? 'auto' : 'smooth'
+      behavior: movimentoPermitido() ? 'smooth' : 'auto'
     });
   });
 
-  // Verifica a rolagem da página.
-  window.addEventListener(
-    'scroll',
-    atualizarVisibilidade,
-    { passive: true }
-  );
+  window.addEventListener('scroll', atualizarVisibilidade, {
+    passive: true
+  });
 
-  // Configura o estado inicial do botão.
   atualizarVisibilidade();
 }
 
-/* =========================================================
-   TRATAMENTO DE ERROS
-   ========================================================= */
+// ==================================================
+// TRATAMENTO DE ERROS
+// ==================================================
 
 window.addEventListener('error', (e) => {
   mostrarToast('Erro no script: ' + e.message);
@@ -846,143 +757,255 @@ window.addEventListener('unhandledrejection', (e) => {
   );
 });
 
-/* =========================================================
-   INICIALIZAÇÃO DO SISTEMA
-   ========================================================= */
+// ==================================================
+// INICIALIZAÇÃO PRINCIPAL
+// ==================================================
 
 function iniciar() {
   ligar('btnAnalisar', 'click', analisarProduto);
-
   ligar('btnCopiarTudo', 'click', copiarTudo);
-
   ligar('btnSalvar', 'click', salvarProduto);
-
   ligar('btnCarregar', 'click', carregarProduto);
+  ligar('btnExcluirProduto', 'click', excluirProdutoSalvo);
 
-
-  // Excluir produto selecionado
-  ligar(
-    'btnExcluirProduto',
-    'click',
-    excluirProdutoSalvo
-  );
-
-  // Habilitar a lixeira ao selecionar um produto
-  ligar(
-    'produtosSalvos',
-    'change',
-    () => {
-      const botao = $('btnExcluirProduto');
-
-      if (botao) {
-        botao.disabled = !valorDe('produtosSalvos');
-      }
-    }
-  );
-
-
-  ligar(
-    'btnLimparEntrada',
-    'click',
-    () => limparProduto(true)
-  );
-
-  ligar('btnNovo', 'click', novoProduto);
-
-  ligar('url', 'keydown', (e) => {
-    if (e.key === 'Enter') {
-      analisarProduto();
+  ligar('produtosSalvos', 'change', () => {
+    const botao = $('btnExcluirProduto');
+    if (botao) {
+      botao.disabled = !valorDe('produtosSalvos');
     }
   });
 
-  atualizarListaSalvos();
+  ligar('btnLimparEntrada', 'click', () => limparProduto(true));
+  ligar('btnNovo', 'click', novoProduto);
 
-  // Inicializa o botão de voltar ao topo.
+  ligar('url', 'keydown', (e) => {
+    if (e.key === 'Enter') analisarProduto();
+  });
+
+  atualizarListaSalvos();
   iniciarVoltarAoTopo();
 
-  console.log(
-    'B.live In Pets: Gerador Inteligente carregado.'
-  );
+  console.log('B.live In Pets: Gerador Inteligente carregado.');
 }
 
-// Inicialização automática.
-if (document.readyState === 'loading') {
-  document.addEventListener(
-    'DOMContentLoaded',
-    iniciar
+// ==================================================
+// CONFIGURAÇÕES DE TEMA E ANIMAÇÃO
+// ==================================================
+
+function iniciarConfiguracoesBlive() {
+  const raiz = document.documentElement;
+
+  const botao = $('btnConfiguracoes');
+  const painel = $('painelConfiguracoes');
+  const toggleTema = $('toggleTema');
+  const toggleAnimacoes = $('toggleAnimacoes');
+
+  if (!botao || !painel || !toggleTema || !toggleAnimacoes) {
+    return;
+  }
+
+  const inicio = document.querySelector(
+    '#pagina-titulo .titulo-inicio'
   );
-} else {
-  iniciar();
-}
+  const destaque = document.querySelector(
+    '#pagina-titulo .titulo-destaque'
+  );
+  const cursor = document.querySelector(
+    '#pagina-titulo .cursor-digitacao'
+  );
 
+  const CHAVE_TEMA = 'blive-tema-v2';
+  const CHAVE_ANIMACOES = 'blive-animacoes-v2';
 
-document.addEventListener("DOMContentLoaded", () => {
-  const inicio = document.querySelector(".titulo-inicio");
-  const destaque = document.querySelector(".titulo-destaque");
-  const cursor = document.querySelector(".cursor-digitacao");
+  function lerPreferencia(chave) {
+    try {
+      return localStorage.getItem(chave);
+    } catch {
+      return null;
+    }
+  }
 
-  if (!inicio || !destaque || !cursor) return;
+  function salvarPreferencia(chave, valor) {
+    try {
+      localStorage.setItem(chave, valor);
+    } catch {
+      // Mantém a configuração até a página ser fechada.
+    }
+  }
 
-  const texto1 = "Seu catálogo, ";
-  const texto2 = "mais inteligente.";
+  // Configurações começam fechadas.
+  painel.hidden = true;
+  botao.setAttribute('aria-expanded', 'false');
+
+  botao.addEventListener('click', () => {
+    const abrir = painel.hidden;
+    painel.hidden = !abrir;
+    botao.setAttribute('aria-expanded', String(abrir));
+  });
+
+  // Tema claro e escuro.
+  function aplicarTema(escuro) {
+    raiz.dataset.theme = escuro ? 'dark' : 'light';
+    raiz.style.colorScheme = escuro ? 'dark' : 'light';
+    toggleTema.checked = escuro;
+  }
+
+  const temaSalvo = lerPreferencia(CHAVE_TEMA);
+  aplicarTema(temaSalvo === 'dark');
+
+  toggleTema.addEventListener('change', () => {
+    const escuro = toggleTema.checked;
+    aplicarTema(escuro);
+    salvarPreferencia(CHAVE_TEMA, escuro ? 'dark' : 'light');
+  });
+
+  // Um único controlador para a animação do título.
+  const texto1 = 'Seu catálogo, ';
+  const texto2 = 'mais inteligente.';
   const textoCompleto = texto1 + texto2;
 
   let indice = 0;
   let apagando = false;
+  let temporizador = null;
+  let versaoAnimacao = 0;
 
   const velocidadeEscrita = 75;
   const velocidadeApagar = 40;
   const pausaFinal = 3000;
   const pausaReinicio = 500;
 
-  function animarTexto() {
-    if (!apagando) {
-      // Escreve letra por letra
-      indice++;
+  function cancelarDigitacao() {
+    versaoAnimacao++;
 
-      if (indice <= texto1.length) {
-        inicio.textContent = textoCompleto.slice(0, indice);
-        destaque.textContent = "";
-      } else {
-        inicio.textContent = texto1;
-        destaque.textContent = textoCompleto.slice(
-          texto1.length,
-          indice
-        );
-      }
-
-      if (indice >= textoCompleto.length) {
-        apagando = true;
-        setTimeout(animarTexto, pausaFinal);
-        return;
-      }
-
-      setTimeout(animarTexto, velocidadeEscrita);
-
-    } else {
-      // Apaga letra por letra
-      indice--;
-
-      if (indice >= texto1.length) {
-        destaque.textContent = textoCompleto.slice(
-          texto1.length,
-          indice
-        );
-      } else {
-        inicio.textContent = texto1.slice(0, indice);
-        destaque.textContent = "";
-      }
-
-      if (indice <= 0) {
-        apagando = false;
-        setTimeout(animarTexto, pausaReinicio);
-        return;
-      }
-
-      setTimeout(animarTexto, velocidadeApagar);
+    if (temporizador !== null) {
+      clearTimeout(temporizador);
+      temporizador = null;
     }
   }
 
-  // Começa a animação
-  animarTexto();
-});
+  function mostrarTextoCompleto() {
+    if (!inicio || !destaque) return;
+
+    inicio.textContent = texto1;
+    destaque.textContent = texto2;
+    cursor?.classList.add('finalizado');
+  }
+
+  function atualizarTexto() {
+    if (!inicio || !destaque) return;
+
+    inicio.textContent = textoCompleto.slice(
+      0,
+      Math.min(indice, texto1.length)
+    );
+
+    destaque.textContent = textoCompleto.slice(
+      texto1.length,
+      indice
+    );
+  }
+
+  function agendarProximoPasso(tempo, versao) {
+    temporizador = setTimeout(() => {
+      if (versao !== versaoAnimacao) return;
+      digitar(versao);
+    }, tempo);
+  }
+
+  function digitar(versao) {
+    if (
+      versao !== versaoAnimacao ||
+      raiz.dataset.animacoes === 'off'
+    ) return;
+
+    if (!apagando) {
+      indice = Math.min(indice + 1, textoCompleto.length);
+      atualizarTexto();
+
+      if (indice >= textoCompleto.length) {
+        apagando = true;
+        agendarProximoPasso(pausaFinal, versao);
+        return;
+      }
+
+      agendarProximoPasso(velocidadeEscrita, versao);
+      return;
+    }
+
+    indice = Math.max(0, indice - 1);
+    atualizarTexto();
+
+    if (indice === 0) {
+      apagando = false;
+      agendarProximoPasso(pausaReinicio, versao);
+      return;
+    }
+
+    agendarProximoPasso(velocidadeApagar, versao);
+  }
+
+  function iniciarDigitacao() {
+    cancelarDigitacao();
+    if (!inicio || !destaque) return;
+
+    indice = 0;
+    apagando = false;
+    inicio.textContent = '';
+    destaque.textContent = '';
+
+    cursor?.classList.remove('finalizado');
+
+    const versaoAtual = versaoAnimacao;
+    agendarProximoPasso(350, versaoAtual);
+  }
+
+  function aplicarPreferenciaAnimacoes(desativar) {
+    raiz.dataset.animacoes = desativar ? 'off' : 'on';
+    toggleAnimacoes.checked = desativar;
+
+    if (desativar) {
+      cancelarDigitacao();
+      mostrarTextoCompleto();
+      return;
+    }
+
+    iniciarDigitacao();
+  }
+
+  const animacoesSalvas = lerPreferencia(CHAVE_ANIMACOES);
+
+  const prefereMenosMovimento =
+    window.matchMedia?.('(prefers-reduced-motion: reduce)').matches
+    ?? false;
+
+  const desativarInicial =
+    animacoesSalvas === null
+      ? prefereMenosMovimento
+      : animacoesSalvas === 'off';
+
+  aplicarPreferenciaAnimacoes(desativarInicial);
+
+  toggleAnimacoes.addEventListener('change', () => {
+    const desativar = toggleAnimacoes.checked;
+    aplicarPreferenciaAnimacoes(desativar);
+    salvarPreferencia(
+      CHAVE_ANIMACOES,
+      desativar ? 'off' : 'on'
+    );
+  });
+}
+
+function inicializarSistema() {
+  iniciar();
+  iniciarConfiguracoesBlive();
+}
+
+if (document.readyState === 'loading') {
+  document.addEventListener(
+    'DOMContentLoaded',
+    inicializarSistema,
+    { once: true }
+  );
+} else {
+  inicializarSistema();
+}
