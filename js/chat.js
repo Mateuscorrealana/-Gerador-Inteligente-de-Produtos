@@ -143,9 +143,9 @@ function formatarHora(timestamp) {
 
   return data
     ? data.toLocaleTimeString('pt-BR', {
-        hour: '2-digit',
-        minute: '2-digit'
-      })
+      hour: '2-digit',
+      minute: '2-digit'
+    })
     : 'Enviando…';
 }
 
@@ -215,10 +215,10 @@ function atualizarBarraResposta() {
 
   $('replyAuthor').textContent = original
     ? 'Respondendo a ' + (
-        original.autorUid === usuarioAtual?.uid
-          ? 'você'
-          : (original.autorNome || 'colaborador')
-      )
+      original.autorUid === usuarioAtual?.uid
+        ? 'você'
+        : (original.autorNome || 'colaborador')
+    )
     : 'Respondendo a uma mensagem';
 
   $('replyText').textContent = original
@@ -355,10 +355,10 @@ function criarCitacao(idOriginal) {
 
   autor.textContent = original
     ? (
-        original.autorUid === usuarioAtual?.uid
-          ? 'Você'
-          : (original.autorNome || 'Colega')
-      )
+      original.autorUid === usuarioAtual?.uid
+        ? 'Você'
+        : (original.autorNome || 'Colega')
+    )
     : 'Mensagem anterior';
 
   resumo.textContent = original
@@ -556,7 +556,6 @@ function acompanharChat() {
 
   if (!usuarioAtual) return;
 
-  definirStatus('Conectando ao chat…');
 
   const referencia = collection(
     db,
@@ -585,11 +584,6 @@ function acompanharChat() {
         .reverse();
 
       renderizar();
-
-      definirStatus(
-        'Conectado · tempo real',
-        'online'
-      );
     },
 
     (erro) => {
