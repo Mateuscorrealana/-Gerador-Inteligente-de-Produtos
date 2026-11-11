@@ -227,6 +227,47 @@
             </span>
           </label>
 
+
+          <!-- EDITAR PERFIL DO USUÁRIO -->
+          <div class="config-perfil" id="configPerfil" hidden>
+
+            <div class="config-perfil-titulo">
+              <strong>Meu perfil</strong>
+              <small>Visível para o outro participante</small>
+            </div>
+
+            <div class="config-perfil-foto">
+              <div class="config-avatar">
+                <img id="perfilFotoPreview" alt="Minha foto de perfil" hidden>
+                <span id="perfilFotoFallback">?</span>
+              </div>
+
+              <div class="config-foto-acoes">
+                <button type="button" id="perfilEscolherFoto">
+                  Alterar foto
+                </button>
+
+                <button type="button" id="perfilRestaurarGoogle" class="config-link">
+                  Usar foto Google
+                </button>
+              </div>
+            </div>
+
+            <input type="file" id="perfilArquivo" accept="image/jpeg,image/png,image/webp" hidden>
+
+            <label for="perfilNome">
+              Nome de exibição
+            </label>
+
+            <input type="text" id="perfilNome" maxlength="100" placeholder="Seu nome no chat" autocomplete="nickname">
+
+            <button type="button" id="perfilSalvar" class="config-salvar">
+              Salvar alterações
+            </button>
+
+          </div>
+
+
         </div>
 
       </div>
