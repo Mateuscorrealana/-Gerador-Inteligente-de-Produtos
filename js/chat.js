@@ -1,22 +1,155 @@
 
 'use strict';
 
-/* =========================================================
-   B.LIVE INTELLIGENCE — CHAT ÚNICO
-   Firebase Authentication + Cloud Firestore
-
-   - Mensagens em tempo real (sala "geral")
-   - Responder mensagens específicas
-   - Excluir somente mensagens próprias
-   - Botões de ação SOMENTE COM ÍCONES
-   - Busca, emojis e figurinhas
-   ========================================================= */
-
 import {
   auth,
   db,
   googleProvider
 } from './firebase.config.js';
+
+
+// ========================================
+// PERFIL GOOGLE DO OUTRO PARTICIPANTE
+// ========================================
+
+const CONTAS_CHAT = [
+  'bliveinpets25@gmail.com',
+  'comercial@blive.com.br'
+];
+
+let cancelarEscutaPerfil = null;
+
+function validarFoto(url) {
+  try {
+    const endereco = new URL(url);
+
+    return endereco.protocol === 'https:'
+      ? endereco.href
+      : '';
+  } catch {
+    return '';
+  }
+}
+
+function mostrarPerfilContato(nome, fotoURL) {
+  const titulo = $('roomTitle');
+  const foto = $('contactPhoto');
+  const fallback = $('contactFallback');
+
+  const nomeSeguro = nome || 'Outro participante';
+  const urlSegura = validarFoto(fotoURL);
+
+  titulo.textContent = nomeSeguro;
+
+  fallback.textContent = nomeSeguro
+    .trim()
+    .charAt(0)
+    .toUpperCase() || '?';
+
+  foto.onerror = () => {
+    foto.hidden = true;
+    fallback.hidden = false;
+  };
+
+  if (urlSegura) {
+    foto.src = urlSegura;
+    foto.hidden = false;
+    fallback.hidden = true;
+  } else {
+    foto.removeAttribute('src');
+    foto.hidden = true;
+    fallback.hidden = false;
+  }
+}
+
+function sincronizarPerfilGoogle(usuario) {
+  if (cancelarEscutaPerfil) {
+    cancelarEscutaPerfil();
+    cancelarEscutaPerfil = null;
+  }
+
+  if (!usuario?.email) return;
+
+  const emailAtual = usuario.email.toLowerCase();
+
+  if (!CONTAS_CHAT.includes(emailAtual)) {
+    return;
+  }
+
+  const outroEmail = CONTAS_CHAT.find(
+    email => email !== emailAtual
+  );
+
+  // Obtém nome e foto do próprio login Google.
+  const perfilGoogle = usuario.providerData.find(
+    perfil => perfil.providerId === 'google.com'
+  );
+
+  const nome = (
+    usuario.displayName ||
+    perfilGoogle?.displayName ||
+    emailAtual
+  ).slice(0, 100);
+
+  const fotoURL = validarFoto(
+    usuario.photoURL ||
+    perfilGoogle?.photoURL ||
+    ''
+  );
+
+  // Salva somente o próprio perfil.
+  setDoc(
+    doc(db, 'perfis', emailAtual),
+    {
+      email: emailAtual,
+      nome,
+      fotoURL,
+      atualizadoEm: serverTimestamp()
+    }
+  ).catch(erro => {
+    console.error(
+      'Erro ao salvar perfil Google:',
+      erro
+    );
+  });
+
+  mostrarPerfilContato('Carregando contato...', '');
+
+  // Acompanha o perfil da outra conta.
+  cancelarEscutaPerfil = onSnapshot(
+    doc(db, 'perfis', outroEmail),
+
+    snapshot => {
+      if (!snapshot.exists()) {
+        mostrarPerfilContato(
+          'Aguardando primeiro acesso...',
+          ''
+        );
+
+        return;
+      }
+
+      const perfil = snapshot.data();
+
+      mostrarPerfilContato(
+        perfil.nome,
+        perfil.fotoURL
+      );
+    },
+
+    erro => {
+      console.error(
+        'Erro ao buscar perfil do contato:',
+        erro
+      );
+
+      mostrarPerfilContato(
+        'Perfil indisponível',
+        ''
+      );
+    }
+  );
+}
 
 import {
   onAuthStateChanged,
@@ -33,7 +166,8 @@ import {
   onSnapshot,
   orderBy,
   query,
-  serverTimestamp
+  serverTimestamp,
+  setDoc
 } from 'https://www.gstatic.com/firebasejs/13.2.0/firebase-firestore.js';
 
 const $ = (id) => document.getElementById(id);
@@ -949,6 +1083,11 @@ onAuthStateChanged(
 
     cancelarResposta();
 
+    if (cancelarEscutaPerfil) {
+      cancelarEscutaPerfil();
+      cancelarEscutaPerfil = null;
+    }
+
     if (!usuario) {
 
       $('authUser').textContent = '';
@@ -972,6 +1111,9 @@ onAuthStateChanged(
     $('logoutGoogle').hidden = false;
 
     exibirChat();
+
+    // Exibe nome e foto da outra conta.
+    sincronizarPerfilGoogle(usuario);
 
     acompanharChat();
   },
